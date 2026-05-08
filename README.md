@@ -157,3 +157,10 @@ Contribuições são bem-vindas! Segue os passos:
 ## 📄 Licença
 
 Este projeto está sob a licença [MIT](LICENSE).
+
+## Equipa
+
+- Freddy Menezes
+- Joaquim Simão
+- Mbala Nkunsunga
+- Ilídio Manuel
