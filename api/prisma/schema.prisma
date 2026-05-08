@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── ENUM ──────────────────────────────────────────
+enum RoleType {
+  admin
+  user
+
+  @@map("role_type")
+}
+
+// ── DIFFICULTY ────────────────────────────────────
+model Difficulty {
+  id      Int    @id @default(autoincrement())
+  name    String @unique @db.VarChar(50)
+  quizzes Quiz[]
+
+  @@map("difficulties")
+}
+
+// ── CATEGORY ──────────────────────────────────────
+model Category {
+  id      Int    @id @default(autoincrement())
+  name    String @unique @db.VarChar(100)
+  quizzes Quiz[]
+
+  @@map("categories")
+}
+
+// ── USER ──────────────────────────────────────────
+model User {
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  userRole     RoleType @map("user_role") @default(user)
+  banned       Boolean  @default(false)
+  createdAt    DateTime @map("created_at") @default(now())
+
+  quizzesCreated Quiz[]    @relation("QuizCreator")
+  sessions       Session[]
+  scores         Score[]
+  bansReceived   BanLog[]  @relation("BannedUser")
+  bansIssued     BanLog[]  @relation("AdminBan")
+
+  @@map("users")
+}
+
+// ── QUIZ ──────────────────────────────────────────
+model Quiz {
+  id           String   @id @default(uuid())
+  title        String   @db.VarChar(255)
+  categoryId   Int      @map("category_id")
+  difficultyId Int      @map("difficulty_id")
+  createdBy    String   @map("created_by")
+  active       Boolean  @default(true)
+  createdAt    DateTime @map("created_at") @default(now())
+
+  category   Category   @relation(fields: [categoryId], references: [id])
+  difficulty Difficulty @relation(fields: [difficultyId], references: [id])
+  creator    User       @relation("QuizCreator", fields: [createdBy], references: [id])
+  questions  Question[]
+  sessions   Session[]
+  scores     Score[]
+
+  @@map("quizzes")
+}
+
+// ── QUESTION ──────────────────────────────────────
+model Question {
+  id        String   @id @default(uuid())
+  quizId    String   @map("quiz_id")
+  text      String
+  position  Int
+  createdAt DateTime @map("created_at") @default(now())
+
+  quiz           Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options        Option[]
+  correctAnswer  CorrectAnswer?
+  sessionAnswers SessionAnswer[]
+
+  @@unique([quizId, position])
+  @@map("questions")
+}
+
+// ── OPTION ────────────────────────────────────────
+model Option {
+  id         String @id @default(uuid())
+  questionId String @map("question_id")
+  text       String
+
+  question       Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  correctAnswer  CorrectAnswer?
+  sessionAnswers SessionAnswer[]
+
+  @@map("options")
+}
+
+// ── CORRECT ANSWER ────────────────────────────────
+model CorrectAnswer {
+  questionId String @id @map("question_id")
+  optionId   String @unique @map("option_id")  // ← adiciona @unique aqui
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option   Option   @relation(fields: [optionId], references: [id])
+
+  @@map("correct_answers")
+}
+
+// ── SESSION ───────────────────────────────────────
+model Session {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  quizId      String    @map("quiz_id")
+  startedAt   DateTime  @map("started_at") @default(now())
+  completedAt DateTime? @map("completed_at")
+
+  user    User            @relation(fields: [userId], references: [id])
+  quiz    Quiz            @relation(fields: [quizId], references: [id])
+  answers SessionAnswer[]
+  score   Score?
+
+  @@map("sessions")
+}
+
+// ── SESSION ANSWER ────────────────────────────────
+model SessionAnswer {
+  id         String @id @default(uuid())
+  sessionId  String @map("session_id")
+  questionId String @map("question_id")
+  optionId   String @map("option_id")
+
+  session  Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id])
+  option   Option   @relation(fields: [optionId], references: [id])
+
+  @@unique([sessionId, questionId])
+  @@map("session_answers")
+}
+
+// ── SCORE ─────────────────────────────────────────
+model Score {
+  id         String   @id @default(uuid())
+  sessionId  String   @unique @map("session_id")
+  userId     String   @map("user_id")
+  quizId     String   @map("quiz_id")
+  totalScore Int      @map("total_score") @default(0)
+  createdAt  DateTime @map("created_at") @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  quiz    Quiz    @relation(fields: [quizId], references: [id])
+
+  @@map("scores")
+}
+
+// ── BAN LOG ───────────────────────────────────────
+model BanLog {
+  id       String   @id @default(uuid())
+  userId   String   @map("user_id")
+  adminId  String   @map("admin_id")
+  reason   String?
+  bannedAt DateTime @map("banned_at") @default(now())
+
+  user  User @relation("BannedUser", fields: [userId], references: [id])
+  admin User @relation("AdminBan", fields: [adminId], references: [id])
+
+  @@map("ban_logs")
+}
