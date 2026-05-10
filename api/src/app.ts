@@ -1,15 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { authenticate } from '@middleware/auth.middleware.js';
+import { authLimiter } from '@middleware/rateLimit.middleware.js';
+import authRoutes from '@routes/auth.routes.js';
 
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
+app.use('/auth', authRoutes);
+
+app.use(authenticate);
+app.use(authLimiter);
 
 export default app;
