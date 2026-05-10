@@ -10,7 +10,7 @@ export const registerUser = async (
 ) => {
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
-    throw new Error('Email já registado');
+    throw new Error('EMAIL_ALREADY_EXISTS');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,15 +18,15 @@ export const registerUser = async (
     data: { name, email, passwordHash: hashedPassword },
   });
 
-  return { message: 'Utilizador criado com sucesso. Faça login para continuar' };
+  return { message: 'USER_CREATED_SUCCESSFULLY' };
 };
 
 export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new Error('Credenciais inválidas');
+  if (!user) throw new Error('INVALID_CREDENTIALS');
 
   const isValid = await bcrypt.compare(password, user.passwordHash);
-  if (!isValid) throw new Error('Credenciais inválidas');
+  if (!isValid) throw new Error('INVALID_CREDENTIALS');
 
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },

@@ -7,10 +7,10 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.token;
+  const token = req.cookies?.token;
 
   if (!token) {
-    return res.status(401).json({ message: 'Token em falta' });
+    return res.status(401).json({ error_code: 'AUTH_TOKEN_REQUIRED' });
   }
 
   try {
@@ -18,6 +18,6 @@ export const authenticate = (
     req.user = decoded as UserPayload;
     next(); 
   } catch {
-    res.status(401).json({ message: 'Token inválido' });
+    res.status(401).json({ error_code: 'AUTH_INVALID_TOKEN' });
   }
 };

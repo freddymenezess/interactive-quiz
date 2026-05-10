@@ -46,7 +46,7 @@
     "paths": {
       "@controllers/*": ["./src/controllers/*"],
       "@services/*": ["./src/services/*"],
-      "@middleware/*": ["./src/middleware/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
       "@lib/*": ["./src/lib/*"],
       "@routes/*": ["./src/routes/*"],
       "@types/*": ["./src/@types/*"]
