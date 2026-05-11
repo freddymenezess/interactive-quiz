@@ -26,7 +26,7 @@ export const getQuizById = async (id: string) => {
     },
   });
 
-  if (!quiz) throw new Error('Quiz não encontrado');
+  if (!quiz) throw new Error('QUIZ_NOT_FOUND');
   return quiz;
 };
 
@@ -41,7 +41,7 @@ export const createQuiz = async (data: {
 
 export const startSession = async (userId: string, quizId: string) => {
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
-  if (!quiz) throw new Error('Quiz não encontrado');
+  if (!quiz) throw new Error('QUIZ_NOT_FOUND');
 
   return prisma.session.create({
     data: { userId, quizId },
@@ -61,7 +61,7 @@ export const submitAnswer = async (data: {
       },
     },
   });
-  if (existing) throw new Error('Pergunta já respondida');
+  if (existing) throw new Error('QUESTION_ALREADY_ANSWERED');
 
   return prisma.sessionAnswer.create({ data });
 };

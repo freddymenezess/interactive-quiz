@@ -6,7 +6,7 @@ export const getAllQuizzes = async (_req: Request, res: Response) => {
     const quizzes = await quizService.getAllQuizzes();
     res.status(200).json(quizzes);
   } catch {
-    res.status(500).json({ message: 'Erro ao buscar quizzes' });
+    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
 
@@ -17,13 +17,13 @@ export const getQuizById = async (req: Request, res: Response) => {
       : req.params.id;
 
     if (!quizId) {
-      return res.status(400).json({ message: 'ID do quiz é obrigatório' });
+      return res.status(400).json({ error_code: 'INVALID_QUIZ_ID' });
     }
 
     const quiz = await quizService.getQuizById(quizId);
     res.status(200).json(quiz);
   } catch {
-    res.status(404).json({ message: 'Quiz não encontrado' });
+    res.status(404).json({ error_code: 'QUIZ_NOT_FOUND' });
   }
 };
 
@@ -32,9 +32,7 @@ export const createQuiz = async (req: Request, res: Response) => {
     const { title, categoryId, difficultyId } = req.body;
 
     if (!title || !categoryId || !difficultyId) {
-      return res
-        .status(400)
-        .json({ message: 'Todos os campos são obrigatórios' });
+      return res.status(400).json({ error_code: 'INVALID_QUIZ_DATA' });
     }
 
     const quiz = await quizService.createQuiz({
@@ -46,16 +44,23 @@ export const createQuiz = async (req: Request, res: Response) => {
 
     res.status(201).json(quiz);
   } catch {
-    res.status(500).json({ message: 'Erro ao criar quiz' });
+    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
 
 export const startSession = async (req: Request, res: Response) => {
   try {
-    const session = await quizService.startSession(req.user!.id, req.params.id);
+    const id = Array.isArray(req.params.id)
+      ? req.params.id[0]
+      : req.params.id;
+
+    if (!id) {
+      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
+    }
+    const session = await quizService.startSession(req.user!.id, id);
     res.status(201).json(session);
   } catch {
-    res.status(500).json({ message: 'Erro ao iniciar sessão' });
+    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
 
@@ -64,31 +69,43 @@ export const submitAnswer = async (req: Request, res: Response) => {
     const { questionId, optionId } = req.body;
 
     if (!questionId || !optionId) {
-      return res
-        .status(400)
-        .json({ message: 'Todos os campos são obrigatórios' });
+      return res.status(400).json({ error_code: 'INVALID_ANSWER_DATA' });
+    }
+    const sessionId = Array.isArray(req.params.sessionId)
+      ? req.params.sessionId[0]
+      : req.params.sessionId;
+
+    if (!sessionId) {
+      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
     }
 
     const answer = await quizService.submitAnswer({
-      sessionId: req.params.sessionId,
+      sessionId,
       questionId,
       optionId,
     });
 
     res.status(201).json(answer);
   } catch {
-    res.status(500).json({ message: 'Erro ao submeter resposta' });
+    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
 
 export const finishSession = async (req: Request, res: Response) => {
   try {
+    const sessionId = Array.isArray(req.params.sessionId)
+      ? req.params.sessionId[0]
+      : req.params.sessionId;
+
+    if (!sessionId) {
+      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
+    }
     const result = await quizService.finishSession(
-      req.params.sessionId,
+      sessionId,
       req.user!.id
     );
     res.status(200).json(result);
   } catch {
-    res.status(500).json({ message: 'Erro ao terminar sessão' });
+    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
