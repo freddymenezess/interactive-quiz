@@ -1,25 +1,39 @@
 import type { Request, Response } from 'express';
-import * as rankingService from '../services/ranking.service.js';
+import { getGlobalRanking, getRankingByQuiz } from '../services/ranking.service.js';
 
-export async function getGlobal(req: Request, res: Response) {
+export const getGlobal = async (req: Request, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const ranking = await rankingService.getGlobalRanking(limit);
-    return res.status(200).json(ranking);
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const ranking = await getGlobalRanking(limit);
+    
+    return res.json(ranking);
   } catch (error) {
-    return res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ 
+      error_code: (error as Error).message 
+    });
   }
-}
+};
 
-export async function getByQuiz(req: Request, res: Response) {
+export const getByQuiz = async (req: Request, res: Response) => {
   try {
-    const { quizId } = Array.isArray(req.params) ? req.params[0] : req.params;
-    const limit = parseInt(req.query.limit as string) || 10;
+    const { quizId } = Array.isArray(req.params) ? req.params[0] : req.params || {};
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
 
-    const ranking = await rankingService.getRankingByQuiz(quizId, limit);
-    return res.status(200).json(ranking);
+    if (!quizId) {
+      return res.status(400).json({ 
+        error_code: 'QUIZ_ID_REQUIRED' 
+      });
+    }
+
+    const ranking = await getRankingByQuiz(quizId, limit);
+    
+    return res.json(ranking);
   } catch (error) {
-    return res.status(500).json({ error: (error as Error).message });
+    const message = (error as Error).message;
+    const statusCode = message === 'QUIZ_NOT_FOUND' ? 404 : 500;
+    
+    return res.status(statusCode).json({ 
+      error_code: message 
+    });
   }
-}
+};

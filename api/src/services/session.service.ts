@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '@lib/prisma.js';
 
 export async function startSession(userId: string, quizId: string) {
   const session = await prisma.session.create({
@@ -55,9 +54,7 @@ export async function finishSession(sessionId: string) {
   let totalScore = 0;
   for (const question of session.quiz.questions) {
     const correta = question.correctAnswer?.optionId;
-    const resposta = session.answers.find(
-      (a) => a.questionId === question.id
-    );
+    const resposta = session.answers.find((a) => a.questionId === question.id);
     if (resposta && resposta.optionId === correta) {
       totalScore += 1;
     }

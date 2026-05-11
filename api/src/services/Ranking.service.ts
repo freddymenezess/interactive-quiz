@@ -1,47 +1,79 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '@lib/prisma.js';
 
-//Os 5 miliores**
-export async function getGlobalRanking(limit = 5) {
+interface RankingEntry {
+  position: number;
+  userId: string;
+  name: string;
+  totalScore: number;
+  completedAt?: Date;
+}
+
+interface Entry {
+  userId: string;
+  _sum: {
+    totalScore: number | null;
+  };
+}
+
+interface Score {
+  userId: string;
+  user: { name: string };
+  totalScore: number;
+  createdAt: Date;
+}
+
+export const getGlobalRanking = async (limit = 10): Promise<RankingEntry[]> => {
   const ranking = await prisma.score.groupBy({
     by: ['userId'],
     _sum: { totalScore: true },
-    orderBy: { _sum: { totalScore: 'desc' } },
+    orderBy: {
+      _sum: { totalScore: 'desc' },
+    },
     take: limit,
   });
-  
-  const rankingComNomes = await Promise.all(
-    ranking.map(async (entry, index) => {
+
+  return Promise.all(
+    ranking.map(async (entry: Entry, index: number) => {
       const user = await prisma.user.findUnique({
         where: { id: entry.userId },
-        select: { id: true, name: true },
+        select: { name: true },
       });
+
       return {
         position: index + 1,
         userId: entry.userId,
-        name: user?.name ?? 'Desconhecido',
+        name: user?.name ?? 'Utilizador Desconhecido',
         totalScore: entry._sum.totalScore ?? 0,
       };
     })
   );
+};
 
-  return rankingComNomes;
-}
-export async function getRankingByQuiz(quizId: string, limit = 10) {
+export const getRankingByQuiz = async (
+  quizId: string,
+  limit = 10
+): Promise<RankingEntry[]> => {
+  const quizExists = await prisma.quiz.findUnique({ where: { id: quizId } });
+  if (!quizExists) {
+    throw new Error('QUIZ_NOT_FOUND');
+  }
+
   const scores = await prisma.score.findMany({
     where: { quizId },
     orderBy: { totalScore: 'desc' },
     take: limit,
     include: {
-      user: { select: { id: true, name: true } },
+      user: {
+        select: { name: true },
+      },
     },
   });
 
-  return scores.map((score, index) => ({
+  return scores.map((score: Score, index: number) => ({
     position: index + 1,
     userId: score.userId,
     name: score.user.name,
     totalScore: score.totalScore,
     completedAt: score.createdAt,
   }));
-}
+};
