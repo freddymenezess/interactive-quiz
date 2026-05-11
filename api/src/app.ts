@@ -6,6 +6,7 @@ import { authenticate } from '@middlewares/auth.middleware.js';
 import { authLimiter } from '@middlewares/rateLimit.middleware.js';
 import authRoutes from '@routes/auth.routes.js';
 import adminRoutes from '@routes/admin.routes.js';
+import quizRoutes from '@routes/quiz.routes.js';
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use(authenticate);
 app.use(authLimiter);
 
 app.use('/admin', adminRoutes);
+app.use('/quizzes', quizRoutes);
 
 export default app;
