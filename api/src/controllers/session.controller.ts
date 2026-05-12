@@ -1,72 +1,73 @@
 import type { Request, Response } from 'express';
-import * as sessionService from '@services/session.service.js';
+import {
+  startSession,
+  submit,
+  finishSession,
+  getSessionById,
+} from '@services/session.service.js';
 
 export const start = async (req: Request, res: Response) => {
   try {
     const { quizId } = req.body;
-    const userId = req.user!.id; // Assume que o middleware de auth já validou o user
+    const userId = req.user!.id;
 
     if (!quizId) {
-      return res.status(400).json({ 
-        error_code: 'QUIZ_ID_REQUIRED' 
+      return res.status(400).json({
+        error_code: 'QUIZ_ID_REQUIRED',
       });
     }
 
-    const session = await sessionService.startSession(userId, quizId);
+    const session = await startSession(userId, quizId);
     return res.status(201).json(session);
-  } catch (error) {
-    return res.status(500).json({ 
-      error_code: (error as Error).message 
+  } catch {
+    return res.status(500).json({
+      error_code: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
 
 export const submitAnswer = async (req: Request, res: Response) => {
   try {
-    const { id: sessionId } = req.params;
+    const sessionId = req.params.id as string;
     const { questionId, optionId } = req.body;
 
     if (!questionId || !optionId) {
-      return res.status(400).json({ 
-        error_code: 'QUESTION_AND_OPTION_REQUIRED' 
+      return res.status(400).json({
+        error_code: 'QUESTION_AND_OPTION_REQUIRED',
       });
     }
 
-    const answer = await sessionService.submitAnswer(sessionId, questionId, optionId);
+    const answer = await submit(sessionId, questionId, optionId);
     return res.status(201).json(answer);
-  } catch (error) {
-    return res.status(400).json({ 
-      error_code: (error as Error).message 
+  } catch {
+    return res.status(400).json({
+      error_code: 'INTERNAL_SERVER_ERROR',
     });
   }
 };
 
 export const finish = async (req: Request, res: Response) => {
   try {
-    const { id: sessionId } = req.params;
+    const sessionId = req.params.id as string;
+    const score = await finishSession(sessionId);
 
-    const score = await sessionService.finishSession(sessionId);
     return res.json(score);
-  } catch (error) {
-    return res.status(400).json({ 
-      error_code: (error as Error).message 
+  } catch {
+    return res.status(400).json({
+      error_code: 'SESSION_NOT_FOUND',
     });
   }
 };
 
 export const getById = async (req: Request, res: Response) => {
   try {
-    const { id: sessionId } = req.params;
+    const sessionId = req.params.id as string;
 
-    const session = await sessionService.getSessionById(sessionId);
+    const session = await getSessionById(sessionId);
     return res.json(session);
-  } catch (error) {
-    const message = (error as Error).message;
-    // Se a mensagem de erro do service indicar que não existe, enviamos 404
-    const statusCode = message.toLowerCase().includes('não encontrada') ? 404 : 400;
-
-    return res.status(statusCode).json({ 
-      error_code: message 
+  } catch {
+    return res.status(404).json({
+      error_code: 'SESSION_NOT_FOUND',
     });
   }
 };

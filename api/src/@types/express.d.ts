@@ -3,17 +3,58 @@ import { RoleType } from '@prisma/client';
 declare global {
   namespace Express {
     interface Request {
-      // Propriedade injetada pelo seu Auth Middleware após verificar o JWT
       user?: {
         id: string;
         email: string;
         role: RoleType;
       };
-      // Tipagem para os cookies (importante para o cookie-parser)
+
       cookies: {
         token?: string;
-        [key: string]: string | undefined; // Permite outros cookies genéricos
+        [key: string]: string | undefined;
+      };
+
+      params: {
+        id?: string;
+        quizId?: string;
+        sessionId?: string;
+        questionId?: string;
+        [key: string]: string | undefined;
+      };
+
+      /**
+       * Tipagem global para o Body.
+       * Usamos Partial para que nem todos os campos sejam obrigatórios em todas as rotas.
+       */
+      body: {
+        // Auth / User
+        name?: string;
+        email?: string;
+        password?: string;
+
+        // Quiz
+        title?: string;
+        categoryId?: number;
+        difficultyId?: number;
+        active?: boolean;
+
+        // Questions & Options
+        text?: string;
+        position?: number;
+        options?: Array<{
+          text: string;
+          isCorrect: boolean;
+        }>;
+
+        // Session / Game
+        quizId?: string;
+        questionId?: string;
+        optionId?: string;
+
+        [key: string]: any; // Permite campos extras sem quebrar o TS
       };
     }
   }
 }
+
+export {};

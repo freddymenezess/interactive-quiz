@@ -21,7 +21,10 @@ export const registerUser = async (
   return { message: 'USER_CREATED_SUCCESSFULLY' };
 };
 
-export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<LoginResponse> => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error('INVALID_CREDENTIALS');
 

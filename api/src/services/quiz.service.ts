@@ -6,7 +6,7 @@ export const getAllQuizzes = async () => {
     include: {
       category: true,
       difficulty: true,
-      createdBy: {
+      creator: {
         select: { name: true },
       },
     },
@@ -23,6 +23,8 @@ export const getQuizById = async (id: string) => {
           options: true,
         },
       },
+      category: true,
+      difficulty: true,
     },
   });
 
@@ -39,58 +41,49 @@ export const createQuiz = async (data: {
   return prisma.quiz.create({ data });
 };
 
-export const startSession = async (userId: string, quizId: string) => {
+export const addQuestion = async (
+  quizId: string,
+  text: string,
+  position: number,
+  options: { text: string; isCorrect: boolean }[]
+) => {
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
   if (!quiz) throw new Error('QUIZ_NOT_FOUND');
 
-  return prisma.session.create({
-    data: { userId, quizId },
-  });
-};
-
-export const submitAnswer = async (data: {
-  sessionId: string;
-  questionId: string;
-  optionId: string;
-}) => {
-  const existing = await prisma.sessionAnswer.findUnique({
-    where: {
-      sessionId_questionId: {
-        sessionId: data.sessionId,
-        questionId: data.questionId,
+  return await prisma.$transaction(async (tx) => {
+    const question = await tx.question.create({
+      data: {
+        text,
+        quizId,
+        position,
       },
-    },
-  });
-  if (existing) throw new Error('QUESTION_ALREADY_ANSWERED');
+    });
 
-  return prisma.sessionAnswer.create({ data });
-};
-
-export const finishSession = async (sessionId: string, userId: string) => {
-  const answers = await prisma.sessionAnswer.findMany({
-    where: { sessionId },
-  });
-
-  const correctAnswers = await prisma.correctAnswer.findMany({
-    where: {
-      questionId: { in: answers.map((a) => a.questionId) },
-    },
-  });
-
-  let score = 0;
-  for (const answer of answers) {
-    const correct = correctAnswers.find(
-      (c) => c.questionId === answer.questionId
+    const createdOptions = await Promise.all(
+      options.map((opt) =>
+        tx.option.create({
+          data: {
+            questionId: question.id,
+            text: opt.text,
+          },
+        })
+      )
     );
-    if (correct?.optionId === answer.optionId) score++;
-  }
 
-  await prisma.session.update({
-    where: { id: sessionId },
-    data: { completedAt: new Date() },
-  });
+    const correctOptionIndex = options.findIndex((opt) => opt.isCorrect);
+    if (correctOptionIndex === -1)
+      throw new Error('MUST_HAVE_ONE_CORRECT_OPTION');
 
-  return prisma.score.create({
-    data: { sessionId, userId, quizId: sessionId, totalScore: score },
+    const correctOption = createdOptions[correctOptionIndex];
+    if (!correctOption) throw new Error('CORRECT_OPTION_NOT_CREATED');
+
+    await tx.correctAnswer.create({
+      data: {
+        questionId: question.id,
+        optionId: correctOption.id,
+      },
+    });
+
+    return { ...question, options: createdOptions };
   });
 };

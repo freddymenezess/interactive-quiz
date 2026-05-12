@@ -2,7 +2,8 @@ import type { Request, Response } from 'express';
 import { loginUser, registerUser } from '@services/auth.service.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+const passwordRegex =
+  /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -21,12 +22,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const { token, user } = await loginUser(email, password);
-    
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 2 * 24 * 60 * 60 * 1000, 
+      maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({ user });
@@ -70,7 +71,6 @@ export const register = async (req: Request, res: Response) => {
     const result = await registerUser(name, email, password);
     return res.status(201).json(result);
   } catch {
-    // Aqui verificamos se o erro vindo do service já é um código ou algo genérico
     return res.status(400).json({ error_code: 'REGISTRATION_FAILED' });
   }
 };

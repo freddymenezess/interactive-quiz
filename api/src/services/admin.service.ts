@@ -1,6 +1,10 @@
 import prisma from '@lib/prisma.js';
 
-export const banUser = async (userId: string, adminId: string, reason: string) => {
+export const banUser = async (
+  userId: string,
+  adminId: string,
+  reason: string
+) => {
   return await prisma.$transaction(async (tx) => {
     const user = await tx.user.update({
       where: { id: userId },
@@ -21,6 +25,6 @@ export const banUser = async (userId: string, adminId: string, reason: string) =
 
 export const listUsers = async () => {
   return await prisma.user.findMany({
-    select: { id: true, name: true, email: true, role: true, banned: true }
+    select: { id: true, name: true, email: true, role: true, banned: true },
   });
 };

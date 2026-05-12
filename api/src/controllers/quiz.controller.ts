@@ -1,33 +1,40 @@
 import type { Request, Response } from 'express';
-import * as quizService from '@services/quiz.service.js';
+import {
+  addQuestion,
+  createQuiz,
+  getAllQuizzes,
+  getQuizById,
+} from '@services/quiz.service.js';
 
-export const getAllQuizzes = async (_req: Request, res: Response) => {
+export const getAll = async (_req: Request, res: Response) => {
   try {
-    const quizzes = await quizService.getAllQuizzes();
-    res.status(200).json(quizzes);
+    const quizzes = await getAllQuizzes();
+    return res.json(quizzes);
   } catch {
-    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
+    return res.status(500).json({
+      error_code: 'INTERNAL_SERVER_ERROR',
+    });
   }
 };
 
-export const getQuizById = async (req: Request, res: Response) => {
+export const getById = async (req: Request, res: Response) => {
   try {
-    const quizId = Array.isArray(req.params.id)
-      ? req.params.id[0]
-      : req.params.id;
+    const { id } = req.params as { id: string };
 
-    if (!quizId) {
+    if (!id) {
       return res.status(400).json({ error_code: 'INVALID_QUIZ_ID' });
     }
 
-    const quiz = await quizService.getQuizById(quizId);
-    res.status(200).json(quiz);
+    const quiz = await getQuizById(id);
+    return res.json(quiz);
   } catch {
-    res.status(404).json({ error_code: 'QUIZ_NOT_FOUND' });
+    return res.status(404).json({
+      error_code: 'QUIZ_NOT_FOUND',
+    });
   }
 };
 
-export const createQuiz = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
     const { title, categoryId, difficultyId } = req.body;
 
@@ -35,77 +42,39 @@ export const createQuiz = async (req: Request, res: Response) => {
       return res.status(400).json({ error_code: 'INVALID_QUIZ_DATA' });
     }
 
-    const quiz = await quizService.createQuiz({
+    const quiz = await createQuiz({
       title,
       categoryId,
       difficultyId,
       createdBy: req.user!.id,
     });
 
-    res.status(201).json(quiz);
+    return res.status(201).json(quiz);
   } catch {
-    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
-  }
-};
-
-export const startSession = async (req: Request, res: Response) => {
-  try {
-    const id = Array.isArray(req.params.id)
-      ? req.params.id[0]
-      : req.params.id;
-
-    if (!id) {
-      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
-    }
-    const session = await quizService.startSession(req.user!.id, id);
-    res.status(201).json(session);
-  } catch {
-    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
-  }
-};
-
-export const submitAnswer = async (req: Request, res: Response) => {
-  try {
-    const { questionId, optionId } = req.body;
-
-    if (!questionId || !optionId) {
-      return res.status(400).json({ error_code: 'INVALID_ANSWER_DATA' });
-    }
-    const sessionId = Array.isArray(req.params.sessionId)
-      ? req.params.sessionId[0]
-      : req.params.sessionId;
-
-    if (!sessionId) {
-      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
-    }
-
-    const answer = await quizService.submitAnswer({
-      sessionId,
-      questionId,
-      optionId,
+    return res.status(500).json({
+      error_code: 'INTERNAL_SERVER_ERROR',
     });
-
-    res.status(201).json(answer);
-  } catch {
-    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };
 
-export const finishSession = async (req: Request, res: Response) => {
+export const addNewQuestion = async (req: Request, res: Response) => {
   try {
-    const sessionId = Array.isArray(req.params.sessionId)
-      ? req.params.sessionId[0]
-      : req.params.sessionId;
+    const quizId = req.params.quizId as string;
+    const { text, position, options } = req.body;
 
-    if (!sessionId) {
-      return res.status(400).json({ error_code: 'INVALID_SESSION_ID' });
+    if (
+      !text ||
+      position === undefined ||
+      !options ||
+      !Array.isArray(options)
+    ) {
+      return res.status(400).json({ error_code: 'INVALID_QUESTION_DATA' });
     }
-    const result = await quizService.finishSession(
-      sessionId,
-      req.user!.id
-    );
-    res.status(200).json(result);
+
+    const question = await addQuestion(quizId, text, position, options);
+
+    return res.status(201).json(question);
   } catch {
-    res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
+    return res.status(400).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };

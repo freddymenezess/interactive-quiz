@@ -8,21 +8,9 @@ interface RankingEntry {
   completedAt?: Date;
 }
 
-interface Entry {
-  userId: string;
-  _sum: {
-    totalScore: number | null;
-  };
-}
-
-interface Score {
-  userId: string;
-  user: { name: string };
-  totalScore: number;
-  createdAt: Date;
-}
-
-export const getGlobalRanking = async (limit = 10): Promise<RankingEntry[]> => {
+export const getGlobalRanking = async (
+  limit: number = 10
+): Promise<RankingEntry[]> => {
   const ranking = await prisma.score.groupBy({
     by: ['userId'],
     _sum: { totalScore: true },
@@ -33,7 +21,7 @@ export const getGlobalRanking = async (limit = 10): Promise<RankingEntry[]> => {
   });
 
   return Promise.all(
-    ranking.map(async (entry: Entry, index: number) => {
+    ranking.map(async (entry, index) => {
       const user = await prisma.user.findUnique({
         where: { id: entry.userId },
         select: { name: true },
@@ -51,7 +39,7 @@ export const getGlobalRanking = async (limit = 10): Promise<RankingEntry[]> => {
 
 export const getRankingByQuiz = async (
   quizId: string,
-  limit = 10
+  limit: number = 10
 ): Promise<RankingEntry[]> => {
   const quizExists = await prisma.quiz.findUnique({ where: { id: quizId } });
   if (!quizExists) {
@@ -69,10 +57,10 @@ export const getRankingByQuiz = async (
     },
   });
 
-  return scores.map((score: Score, index: number) => ({
+  return scores.map((score, index) => ({
     position: index + 1,
     userId: score.userId,
-    name: score.user.name,
+    name: score.user?.name ?? 'Utilizador Desconhecido',
     totalScore: score.totalScore,
     completedAt: score.createdAt,
   }));

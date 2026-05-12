@@ -1,27 +1,19 @@
 import { Router } from 'express';
-import * as quizController from '@controllers/quiz.controller.js';
-import { authenticate } from '@middleware/auth.middleware.js';
-import { isAdmin, isSessionOwner } from '@middleware/quiz.middleware.js';
+import {
+  getAll,
+  getById,
+  create,
+  addNewQuestion,
+} from '@controllers/quiz.controller.js';
+import { authenticate } from '@middlewares/auth.middleware.js';
+import { isAdmin } from '@middlewares/quiz.middleware.js';
 
 const router = Router();
 
-router.get('/', authenticate, quizController.getAllQuizzes);
-router.get('/:id', authenticate, quizController.getQuizById);
+router.get('/', authenticate, getAll);
+router.get('/:id', authenticate, getById);
 
-router.post('/', authenticate, isAdmin, quizController.createQuiz);
-
-router.post('/:id/sessions', authenticate, quizController.startSession);
-router.post(
-  '/sessions/:sessionId/answers',
-  authenticate,
-  isSessionOwner,
-  quizController.submitAnswer
-);
-router.patch(
-  '/sessions/:sessionId/finish',
-  authenticate,
-  isSessionOwner,
-  quizController.finishSession
-);
+router.post('/', authenticate, isAdmin, create);
+router.post('/:quizId/questions', authenticate, isAdmin, addNewQuestion);
 
 export default router;
