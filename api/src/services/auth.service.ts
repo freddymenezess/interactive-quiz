@@ -48,8 +48,8 @@ export const logoutUser = () => {
 
 export const getMe = async (userId: string) => {
   const user = await prisma.user.findUnique({
-    where:  { id: userId },
-    select: { id: true, name: true, role: true }, // nunca devolves a password
+    where: { id: userId },
+    select: { id: true, name: true, role: true },
   });
 
   if (!user) throw new Error('USER_NOT_FOUND');

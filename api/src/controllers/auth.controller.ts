@@ -1,15 +1,20 @@
 import type { Request, Response } from 'express';
-import { loginUser, registerUser, logoutUser, getMe } from '@services/auth.service.js';
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  getMe,
+} from '@services/auth.service.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
   /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
 
-  const COOKIE_OPTIONS = {
+const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure:   process.env.NODE_ENV === 'production',
+  secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
-  maxAge:   2 * 24 * 60 * 60 * 1000,
+  maxAge: 2 * 24 * 60 * 60 * 1000,
 };
 
 export const login = async (req: Request, res: Response) => {
