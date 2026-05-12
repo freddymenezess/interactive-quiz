@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { loginUser, registerUser, logoutUser } from '@services/auth.service.js';
+import { loginUser, registerUser, logoutUser, getMe } from '@services/auth.service.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
@@ -84,5 +84,15 @@ export const logout = (req: Request, res: Response) => {
     return res.status(200).json(result);
   } catch {
     return res.status(500).json({ error_code: 'LOGOUT_FAILED' });
+  }
+};
+
+export const me = async (req: Request, res: Response) => {
+  try {
+    const { id } = (req as any).user;
+    const result = await getMe(id);
+    return res.status(200).json(result);
+  } catch {
+    return res.status(404).json({ error_code: 'USER_NOT_FOUND' });
   }
 };

@@ -45,3 +45,13 @@ export const logoutUser = () => {
   // A lógica de apagar o cookie fica no controller.
   return { message: 'LOGOUT_SUCCESSFULLY' };
 };
+
+export const getMe = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where:  { id: userId },
+    select: { id: true, name: true, role: true }, // nunca devolves a password
+  });
+
+  if (!user) throw new Error('USER_NOT_FOUND');
+  return { user };
+};
