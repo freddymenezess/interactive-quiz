@@ -1,9 +1,16 @@
 import type { Request, Response } from 'express';
-import { loginUser, registerUser } from '@services/auth.service.js';
+import { loginUser, registerUser, logoutUser } from '@services/auth.service.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
   /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+
+  const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure:   process.env.NODE_ENV === 'production',
+  sameSite: 'lax' as const,
+  maxAge:   2 * 24 * 60 * 60 * 1000,
+};
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -23,12 +30,7 @@ export const login = async (req: Request, res: Response) => {
 
     const { token, user } = await loginUser(email, password);
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 2 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie('token', token, COOKIE_OPTIONS);
 
     return res.status(200).json({ user });
   } catch {
@@ -72,5 +74,15 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json(result);
   } catch {
     return res.status(400).json({ error_code: 'REGISTRATION_FAILED' });
+  }
+};
+
+export const logout = (req: Request, res: Response) => {
+  try {
+    const result = logoutUser();
+    res.clearCookie('token', COOKIE_OPTIONS);
+    return res.status(200).json(result);
+  } catch {
+    return res.status(500).json({ error_code: 'LOGOUT_FAILED' });
   }
 };

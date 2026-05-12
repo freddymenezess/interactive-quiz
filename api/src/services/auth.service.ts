@@ -39,3 +39,9 @@ export const loginUser = async (
 
   return { token, user: { id: user.id, name: user.name, role: user.role } };
 };
+
+export const logoutUser = () => {
+  // O JWT é stateless — não há nada para invalidar no servidor.
+  // A lógica de apagar o cookie fica no controller.
+  return { message: 'LOGOUT_SUCCESSFULLY' };
+};
