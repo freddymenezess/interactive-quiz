@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Mode = "login" | "register";
 
@@ -12,6 +13,7 @@ export default function AuthPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -123,7 +125,7 @@ export default function AuthPage() {
 
           {mode === "login" && (
             <div style={styles.forgotRow}>
-              <button type="button" style={styles.forgotBtn}>
+              <button type="button" style={styles.forgotBtn} onClick={() => navigate("/auth/forgot-password")}>
                 Forgot Password?
               </button>
             </div>
@@ -189,17 +191,20 @@ export default function AuthPage() {
 const styles: Record<string, React.CSSProperties> = {
   bg: {
     minHeight: "100vh",
-    background: "#EDE8DC",
+    background: "#C8C0AD",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    padding: "1rem",
+    padding: "1.5rem",
   },
   card: {
     width: "100%",
-    maxWidth: "390px",
-    padding: "2rem 1.8rem",
+    maxWidth: "400px",
+    padding: "2.5rem 2rem",
+    background: "#FDFAF4",
+    borderRadius: "20px",
+    boxShadow: "0 8px 40px rgba(0,0,0,0.15)",
   },
   logoRow: {
     display: "flex",
