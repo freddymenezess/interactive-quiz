@@ -1,4 +1,4 @@
-import quizImage from '../public/quizapp.png';
+import quizImage from '@public/quizapp.png';
 
 function App() {
   return (
