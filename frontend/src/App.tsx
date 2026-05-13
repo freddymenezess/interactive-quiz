@@ -1,18 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AuthPage from "./pages/AuthPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import OTPVerificationPage from "./pages/OTPVerificationPage";
-import CreateNewPasswordPage from "./pages/CreateNewPasswordPage";
+import NewPasswordPage from "./pages/NewPasswordPage";
+import PasswordChangedPage from "./pages/PasswordChangedPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/auth/otp" element={<OTPVerificationPage />} />
-        <Route path="/auth/new-password" element={<CreateNewPasswordPage />} />
-        <Route path="/" element={<div style={{ color: "#1a1a2e", padding: "2rem" }}>Home (em breve)</div>} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/otp-verification" element={<OTPVerificationPage />} />
+        <Route path="/new-password" element={<NewPasswordPage />} />
+        <Route path="/password-changed" element={<PasswordChangedPage />} />
       </Routes>
     </BrowserRouter>
   );
