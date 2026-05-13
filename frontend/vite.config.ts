@@ -28,6 +28,9 @@ export default defineConfig({
       '@reducers': fileURLToPath(new URL('./src/reducers', import.meta.url)),
       '@routes': fileURLToPath(new URL('./src/routes', import.meta.url)),
       '@types': fileURLToPath(new URL('./src/types', import.meta.url)),
+      '@ui': fileURLToPath(new URL('./src/components/ui', import.meta.url)),
+      '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
+      '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
     },
   },
 });

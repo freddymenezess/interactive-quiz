@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -12,8 +12,8 @@ import sessionRoutes from '@routes/session.routes.js';
 import rankingRoutes from '@routes/ranking.routes.js';
 
 const app = express();
+const router = Router();
 
-app.use(cookieParser());
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -23,21 +23,24 @@ app.use(
   })
 );
 app.use(helmet());
+app.use(cookieParser());
 app.use(express.json());
 
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+router.use('/auth', authRoutes);
+
+router.use(authenticate);
+router.use(authLimiter);
+
+router.use('/admin', adminRoutes);
+router.use('/quiz', quizRoutes);
+router.use('/session', sessionRoutes);
+router.use('/ranking', rankingRoutes);
+
+router.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
-  res.status(500).json({ message: 'Erro interno do servidor' });
+  res.status(500).json({ message: 'INTERNAL_SERVER_ERROR' });
 });
 
-app.use('/auth', authRoutes);
-
-app.use(authenticate);
-app.use(authLimiter);
-
-app.use('/admin', adminRoutes);
-app.use('/quiz', quizRoutes);
-app.use('/session', sessionRoutes);
-app.use('/ranking', rankingRoutes);
+app.use('/api', router);
 
 export default app;
