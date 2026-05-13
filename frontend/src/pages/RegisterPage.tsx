@@ -14,10 +14,34 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
-    // TODO: integrar com POST /api/auth/register
-    navigate("/login");
+  const handleRegister = async () => {
+    setError("");
+    if (password !== confirm) {
+      setError("As passwords não coincidem.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || "Erro ao criar conta.");
+      } else {
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      }
+    } catch {
+      setError("Erro de ligação ao servidor.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,8 +77,15 @@ export default function RegisterPage() {
         onChange={setConfirm}
       />
 
+      {/* Error */}
+      {error && (
+        <p className="text-red-500 text-sm mb-3 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          {error}
+        </p>
+      )}
+
       {/* Register btn */}
-      <AuthButton label="Register" onClick={handleRegister} />
+      <AuthButton label={loading ? "A criar conta..." : "Register"} onClick={handleRegister} />
 
       {/* Social */}
       <OrDivider label="Or Register with" />
