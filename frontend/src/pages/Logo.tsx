@@ -1,6 +1,6 @@
 import quizImage from '@public/quizapp.png';
 
-export default function LogoPage() {
+export default function Logo() {
   return (
     <div className="flex items-center gap-2">
       <img src={quizImage} alt="Quiz App Logo" />

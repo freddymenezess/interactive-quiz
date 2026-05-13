@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { authService } from '@api/auth.service';
+import { errorMessages } from '@lib/utils';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -15,6 +16,7 @@ export interface User {
 export interface AuthState {
   user: User | null;
   isLoading: boolean;
+  isSubmitting: boolean;
   error: string | null;
 }
 
@@ -23,13 +25,17 @@ export interface AuthState {
 const initialState: AuthState = {
   user: null,
   isLoading: true,
+  isSubmitting: false,
   error: null,
 };
+
+const getErrorMessage = (code: string): string =>
+  errorMessages[code] ?? errorMessages.UNKNOWN_ERROR;
 
 // ─── Thunks (ações assíncronas) ───────────────────────────────────────────────
 
 export const getMe = createAsyncThunk(
-  'auth/getMe',
+  '/auth/getMe',
   async (_, { rejectWithValue }) => {
     try {
       const data = await authService.getMe();
@@ -41,7 +47,7 @@ export const getMe = createAsyncThunk(
 );
 
 export const login = createAsyncThunk(
-  'auth/login',
+  '/auth/login',
   async (
     credentials: { email: string; password: string },
     { rejectWithValue }
@@ -55,9 +61,23 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
+export const logout = createAsyncThunk('/auth/logout', async () => {
   await authService.logout();
 });
+
+export const register = createAsyncThunk(
+  '/auth/register',
+  async (
+    credentials: { name: string; email: string; password: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      await authService.register(credentials);
+    } catch (err: any) {
+      return rejectWithValue(err.error_code ?? 'UNKNOWN_ERROR');
+    }
+  }
+);
 
 // ─── Slice ────────────────────────────────────────────────────────────────────
 
@@ -88,24 +108,38 @@ const authSlice = createSlice({
     // login
     builder
       .addCase(login.pending, (state) => {
-        state.isLoading = true;
+        state.isSubmitting = true; // ← não toca no isLoading
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isLoading = false;
+        state.isSubmitting = false;
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.payload as string;
-        state.isLoading = false;
+        state.isSubmitting = false;
       });
 
     // logout
     builder.addCase(logout.fulfilled, (state) => {
       state.user = null;
-      state.isLoading = false;
+      state.isSubmitting = false;
       state.error = null;
     });
+
+    // register
+    builder
+      .addCase(register.pending, (state) => {
+        state.isSubmitting = true;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.isSubmitting = false;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isSubmitting = false;
+      });
   },
 });
 

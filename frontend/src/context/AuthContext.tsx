@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '@hooks/useAppDispatch';
-import { login, logout, getMe, clearError } from '@reducers/authSlice';
+import { login, logout, getMe, register, clearError } from '@reducers/authSlice';
 import type { User } from '@reducers/authSlice';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
@@ -9,9 +9,11 @@ import type { User } from '@reducers/authSlice';
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isSubmitting: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   clearError: () => void;
 }
 
@@ -23,7 +25,9 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch();
-  const { user, isLoading, error } = useAppSelector((state) => state.auth);
+  const { user, isLoading, isSubmitting, error } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     dispatch(getMe());
@@ -34,10 +38,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         isLoading,
+        isSubmitting,
         error,
         login: (email, password) =>
           dispatch(login({ email, password })).unwrap(),
         logout: () => dispatch(logout()).unwrap(),
+        register:   (name, email, password)  => dispatch(register({ name, email, password })).unwrap(),
         clearError: () => dispatch(clearError()),
       }}
     >

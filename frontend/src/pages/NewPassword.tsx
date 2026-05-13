@@ -1,28 +1,28 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AuthLayout,
   InputField,
   AuthButton,
-} from "../components/auth/AuthComponents";
+} from '../components/auth/AuthComponents';
 
-export default function NewPasswordPage() {
+export default function NewPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
 
   const handleReset = () => {
     // TODO: integrar com POST /api/auth/reset-password
-    navigate("/password-changed");
+    navigate('/password-changed');
   };
 
   return (
     <AuthLayout>
       {/* Header */}
-      <h1 className="text-2xl font-extrabold text-gray-800 leading-tight mb-3">
+      <h1 className="mb-3 text-2xl leading-tight font-extrabold text-gray-800">
         Create New Password
       </h1>
-      <p className="text-xs text-gray-400 leading-relaxed mb-6">
+      <p className="mb-6 text-xs leading-relaxed text-gray-400">
         Your new password must be unique from those previously used.
       </p>
 

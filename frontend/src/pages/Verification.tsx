@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthLayout, AuthButton } from "../components/auth/AuthComponents";
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthLayout, AuthButton } from '../components/auth/AuthComponents';
 
 export default function OTPVerificationPage() {
   const navigate = useNavigate();
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(['', '', '', '']);
   const refs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -21,28 +21,28 @@ export default function OTPVerificationPage() {
   };
 
   const handleKeyDown = (i: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && !otp[i] && i > 0) {
+    if (e.key === 'Backspace' && !otp[i] && i > 0) {
       refs[i - 1].current?.focus();
     }
   };
 
   const handleVerify = () => {
     // TODO: integrar com POST /api/auth/verify-otp
-    navigate("/new-password");
+    navigate('/new-password');
   };
 
   return (
     <AuthLayout>
       {/* Header */}
-      <h1 className="text-2xl font-extrabold text-gray-800 leading-tight mb-3">
+      <h1 className="mb-3 text-2xl leading-tight font-extrabold text-gray-800">
         OTP Verification
       </h1>
-      <p className="text-xs text-gray-400 leading-relaxed mb-6">
+      <p className="mb-6 text-xs leading-relaxed text-gray-400">
         Enter the verification code we just sent on your email address.
       </p>
 
       {/* OTP Boxes */}
-      <div className="flex gap-3 justify-center mb-6">
+      <div className="mb-6 flex justify-center gap-3">
         {otp.map((v, i) => (
           <input
             key={i}
@@ -51,7 +51,7 @@ export default function OTPVerificationPage() {
             value={v}
             onChange={(e) => handleChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
-            className="w-14 h-14 text-center text-xl font-bold bg-[#EAE6DF] rounded-xl outline-none focus:ring-2 focus:ring-[#4F7EF7] border border-transparent transition"
+            className="h-14 w-14 rounded-xl border border-transparent bg-[#EAE6DF] text-center text-xl font-bold transition outline-none focus:ring-2 focus:ring-[#4F7EF7]"
           />
         ))}
       </div>
@@ -60,10 +60,10 @@ export default function OTPVerificationPage() {
       <AuthButton label="Verify" onClick={handleVerify} />
 
       {/* Bottom link */}
-      <p className="text-center text-xs text-gray-400 mt-6">
-        Didn't receive a code?{" "}
+      <p className="mt-6 text-center text-xs text-gray-400">
+        Didn't receive a code?{' '}
         <button
-          className="text-[#4F7EF7] font-bold hover:underline"
+          className="font-bold text-[#4F7EF7] hover:underline"
           onClick={() => {
             // TODO: integrar com POST /api/auth/resend-otp
           }}

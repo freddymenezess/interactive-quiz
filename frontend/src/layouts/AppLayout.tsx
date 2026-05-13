@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
-import LogoPage from '@pages/LogoPage';
+import LogoPage from '@/pages/Logo';
 
 export default function AppLayout() {
   const { user, isLoading } = useAuth();

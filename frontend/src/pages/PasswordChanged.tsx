@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { AuthLayout, AuthButton } from "../components/auth/AuthComponents";
+import { useNavigate } from 'react-router-dom';
+import { AuthLayout, AuthButton } from '../components/auth/AuthComponents';
 
 export default function PasswordChangedPage() {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ export default function PasswordChangedPage() {
     <AuthLayout>
       <div className="flex flex-col items-center justify-center gap-5 py-4">
         {/* Check circle */}
-        <div className="w-20 h-20 rounded-full bg-[#4F7EF7] flex items-center justify-center shadow-lg">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#4F7EF7] shadow-lg">
           <svg
             width="36"
             height="36"
@@ -23,15 +23,20 @@ export default function PasswordChangedPage() {
 
         {/* Text */}
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold text-gray-800">Password Changed!</h1>
-          <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+          <h1 className="text-2xl font-extrabold text-gray-800">
+            Password Changed!
+          </h1>
+          <p className="mt-2 text-xs leading-relaxed text-gray-400">
             Your password has been changed successfully.
           </p>
         </div>
 
         {/* Back btn */}
-        <div className="w-full mt-2">
-          <AuthButton label="Back to Login" onClick={() => navigate("/login")} />
+        <div className="mt-2 w-full">
+          <AuthButton
+            label="Back to Login"
+            onClick={() => navigate('/login')}
+          />
         </div>
       </div>
     </AuthLayout>

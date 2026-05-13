@@ -14,6 +14,9 @@ interface AuthResponse {
 }
 
 export const authService = {
+  register: (credentials: { name: string; email: string; password: string }) =>
+    api.post('/auth/register', credentials),
+  
   login: (credentials: LoginCredentials) =>
     api.post<AuthResponse>('/auth/login', credentials).then((res) => res.data),
 
