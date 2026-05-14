@@ -14,6 +14,7 @@
     // For nodejs:
     "lib": ["esnext"],
     "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
     // and npm install -D @types/node
 
     // Other Outputs
@@ -22,6 +23,7 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
+    // "ignoreDeprecations": "6.0",
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
@@ -41,7 +43,15 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "paths": {
+      "@controllers/*": ["./src/controllers/*"],
+      "@services/*": ["./src/services/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@types/*": ["./src/@types/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

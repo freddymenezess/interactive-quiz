@@ -33,20 +33,26 @@ model Category {
 }
 
 // ── USER ──────────────────────────────────────────
+enum Gender {
+  male
+  female
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String   @db.VarChar(100)
   email        String   @unique @db.VarChar(255)
   passwordHash String   @map("password_hash") @db.VarChar(255)
-  userRole     RoleType @map("user_role") @default(user)
+  role     RoleType @default(user) @map("user_role")
   banned       Boolean  @default(false)
-  createdAt    DateTime @map("created_at") @default(now())
+  createdAt    DateTime @default(now()) @map("created_at")
 
   quizzesCreated Quiz[]    @relation("QuizCreator")
   sessions       Session[]
   scores         Score[]
   bansReceived   BanLog[]  @relation("BannedUser")
   bansIssued     BanLog[]  @relation("AdminBan")
+  gender   Gender?
 
   @@map("users")
 }
@@ -59,7 +65,7 @@ model Quiz {
   difficultyId Int      @map("difficulty_id")
   createdBy    String   @map("created_by")
   active       Boolean  @default(true)
-  createdAt    DateTime @map("created_at") @default(now())
+  createdAt    DateTime @default(now()) @map("created_at")
 
   category   Category   @relation(fields: [categoryId], references: [id])
   difficulty Difficulty @relation(fields: [difficultyId], references: [id])
@@ -77,7 +83,7 @@ model Question {
   quizId    String   @map("quiz_id")
   text      String
   position  Int
-  createdAt DateTime @map("created_at") @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
   quiz           Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
   options        Option[]
@@ -104,7 +110,7 @@ model Option {
 // ── CORRECT ANSWER ────────────────────────────────
 model CorrectAnswer {
   questionId String @id @map("question_id")
-  optionId   String @unique @map("option_id")  // ← adiciona @unique aqui
+  optionId   String @unique @map("option_id") // ← adiciona @unique aqui
 
   question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   option   Option   @relation(fields: [optionId], references: [id])
@@ -117,7 +123,7 @@ model Session {
   id          String    @id @default(uuid())
   userId      String    @map("user_id")
   quizId      String    @map("quiz_id")
-  startedAt   DateTime  @map("started_at") @default(now())
+  startedAt   DateTime  @default(now()) @map("started_at")
   completedAt DateTime? @map("completed_at")
 
   user    User            @relation(fields: [userId], references: [id])
@@ -149,8 +155,8 @@ model Score {
   sessionId  String   @unique @map("session_id")
   userId     String   @map("user_id")
   quizId     String   @map("quiz_id")
-  totalScore Int      @map("total_score") @default(0)
-  createdAt  DateTime @map("created_at") @default(now())
+  totalScore Int      @default(0) @map("total_score")
+  createdAt  DateTime @default(now()) @map("created_at")
 
   session Session @relation(fields: [sessionId], references: [id])
   user    User    @relation(fields: [userId], references: [id])
@@ -165,7 +171,7 @@ model BanLog {
   userId   String   @map("user_id")
   adminId  String   @map("admin_id")
   reason   String?
-  bannedAt DateTime @map("banned_at") @default(now())
+  bannedAt DateTime @default(now()) @map("banned_at")
 
   user  User @relation("BannedUser", fields: [userId], references: [id])
   admin User @relation("AdminBan", fields: [adminId], references: [id])

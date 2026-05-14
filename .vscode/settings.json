@@ -3,5 +3,10 @@
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 500,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma",
+    "editor.formatOnSave": true
+  },
+  "prisma.pinToPrisma6": false
 }
