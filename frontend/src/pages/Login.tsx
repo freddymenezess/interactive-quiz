@@ -41,16 +41,16 @@ export default function Login() {
 
     try {
       await login(email, password);
-      navigate('/dashboard');
+      navigate('/home');
     } catch {
       // erro tratado pelo useEffect acima
     }
   };
 
   return (
-    <section className="grow-0 basis-sm py-5 lg:basis-md">
-      <h1 className="mb-6 text-xl leading-tight font-extrabold text-gray-800 sm:text-2xl md:text-3xl lg:text-4xl">
-        Bem-vindo de volta! <br /> Estamos contentes por te ver outra vez!
+    <section className="grow-0 basis-sm p-5 lg:basis-md">
+      <h1 className="text-titulo mb-6 text-xl leading-tight font-extrabold sm:text-2xl md:text-3xl lg:text-4xl">
+        Bem-vindo de volta! <br /> Insira os seus dados para continuar!
       </h1>
       <Input
         placeholder="email@exemplo.com"

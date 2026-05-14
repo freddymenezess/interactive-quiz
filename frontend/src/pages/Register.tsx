@@ -10,9 +10,10 @@ export default function Register() {
   const navigate = useNavigate();
   const { register, isSubmitting, error } = useAuth();
   const [username, setUsername] = useState('');
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirm, setConfirm]   = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [gender, setGender] = useState<'male' | 'female' | ''>('');
 
   useEffect(() => {
     if (error) {
@@ -51,7 +52,11 @@ export default function Register() {
       return;
     }
 
-    if (!/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(password)) {
+    if (
+      !/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
+        password
+      )
+    ) {
       toast.error(errorMessages['PASSWORD_WEAK']);
       return;
     }
@@ -61,8 +66,13 @@ export default function Register() {
       return;
     }
 
+    if (!gender) {
+      toast.error(errorMessages['GENDER_REQUIRED']);
+      return;
+    }
+
     try {
-      await register(username, email, password);
+      await register(username, email, password, gender);
       toast.success('Conta criada com sucesso! Faça login para continuar.');
       navigate('/login');
     } catch {
@@ -71,8 +81,8 @@ export default function Register() {
   };
 
   return (
-    <section className="grow-0 basis-sm py-5 lg:basis-md">
-      <h1 className="mb-6 text-xl leading-tight font-extrabold text-gray-800 sm:text-2xl md:text-3xl lg:text-4xl">
+    <section className="grow-0 basis-sm p-5 lg:basis-md">
+      <h1 className="text-titulo mb-6 text-xl leading-tight font-extrabold sm:text-2xl md:text-3xl lg:text-4xl">
         Olá! Registe-se para começar
       </h1>
       <Input
@@ -102,6 +112,35 @@ export default function Register() {
         value={confirm}
         onChange={setConfirm}
       />
+      <div className="mb-3">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          Género
+        </label>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => setGender('male')}
+            className={`flex-1 rounded-lg border py-3 text-sm font-semibold transition ${
+              gender === 'male'
+                ? 'border-botao bg-botao text-white'
+                : 'hover:border-botao border-gray-300 text-gray-600'
+            }`}
+          >
+            Masculino
+          </button>
+          <button
+            type="button"
+            onClick={() => setGender('female')}
+            className={`flex-1 rounded-lg border py-3 text-sm font-semibold transition ${
+              gender === 'female'
+                ? 'border-botao bg-botao text-white'
+                : 'hover:border-botao border-gray-300 text-gray-600'
+            }`}
+          >
+            Femenino
+          </button>
+        </div>
+      </div>
       <AuthButton
         label={isSubmitting ? 'A registrar...' : 'Registrar'}
         onClick={handleRegister}

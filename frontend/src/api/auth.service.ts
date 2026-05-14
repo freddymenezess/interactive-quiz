@@ -14,13 +14,17 @@ interface AuthResponse {
 }
 
 export const authService = {
-  register: (credentials: { name: string; email: string; password: string }) =>
-    api.post('/auth/register', credentials),
-  
+  register: (credentials: {
+    name: string;
+    email: string;
+    password: string;
+    gender: 'male' | 'female';
+  }) => api.post('/auth/register', credentials),
+
   login: (credentials: LoginCredentials) =>
-    api.post<AuthResponse>('/auth/login', credentials).then((res) => res.data),
+    api.post<AuthResponse>('/auth/login', credentials),
 
-  logout: () => api.post('/auth/logout').then((res) => res.data),
+  logout: () => api.post('/auth/logout'),
 
-  getMe: () => api.get<AuthResponse>('/auth/me').then((res) => res.data),
+  getMe: () => api.get<AuthResponse>('/auth/me'),
 };

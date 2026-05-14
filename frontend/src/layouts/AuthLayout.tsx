@@ -7,7 +7,7 @@ export default function AuthLayout() {
   const { user, isLoading } = useAuth();
 
   if (isLoading) return null;
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/home" replace />;
 
   return (
     <>

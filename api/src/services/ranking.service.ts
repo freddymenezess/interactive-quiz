@@ -24,7 +24,7 @@ export const getGlobalRanking = async (
     ranking.map(async (entry, index) => {
       const user = await prisma.user.findUnique({
         where: { id: entry.userId },
-        select: { name: true },
+        select: { name: true, gender: true },
       });
 
       return {

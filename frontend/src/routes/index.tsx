@@ -3,25 +3,16 @@ import AuthLayout from '@/layouts/AuthLayout';
 import AppLayout from '@/layouts/AppLayout';
 import MainLayout from '@/layouts/MainLayout';
 
-// Auth pages
-import LoginPage from '@/pages/LoginPage';
-import RegisterPage from '@/pages/RegisterPage';
-import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
-import OTPVerificationPage from '@/pages/OTPVerificationPage';
-import NewPasswordPage from '@/pages/NewPasswordPage';
-import PasswordChangedPage from '@/pages/PasswordChangedPage';
-
-// Main pages
-import HomePage from '@/pages/HomePage';
-import QuizzesPage from '@/pages/QuizzesPage';
-import LeaderboardPage from '@/pages/LeaderboardPage';
+import Home from '@/pages/Home';
+import QuizzesPage from '@/pages/Quizzes';
+import Ranking from '@/pages/Ranking';
 import FriendsPage from '@/pages/FriendsPage';
-import QuizQuestionPage from '@/pages/QuizQuestionPage';
+import QuizQuestion from '@/pages/QuizQuestion';
 import EnterQuizCodePage from '@/pages/EnterQuizCodePage';
-import AuthLayout from '@layouts/AuthLayout';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
+import SessionResult from '@pages/SessionResult';
 
 export const router = createBrowserRouter([
   {
@@ -31,25 +22,10 @@ export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
     children: [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/register', element: <RegisterPage /> },
-      { path: '/forgot-password', element: <ForgotPasswordPage /> },
-      { path: '/otp-verification', element: <OTPVerificationPage /> },
-      { path: '/new-password', element: <NewPasswordPage /> },
-      { path: '/password-changed', element: <PasswordChangedPage /> },
+      { path: '/login', element: <Login /> },
+      { path: '/register', element: <Register /> },
+      { path: '/forgot-password', element: <ForgotPassword /> },
     ],
-  },
-  {
-    element: <AuthLayout />,
-    children: [{ path: '/login', element: <Login /> }],
-  },
-  {
-    element: <AuthLayout />,
-    children: [{ path: '/register', element: <Register /> }],
-  },
-  {
-    element: <AuthLayout />,
-    children: [{ path: '/forgot-password', element: <ForgotPassword /> }],
   },
   {
     element: <AppLayout />,
@@ -57,12 +33,16 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-          { path: '/home', element: <HomePage /> },
+          { path: '/home', element: <Home /> },
           { path: '/quizzes', element: <QuizzesPage /> },
-          { path: '/leaderboard', element: <LeaderboardPage /> },
+          { path: '/ranking', element: <Ranking /> },
           { path: '/friends', element: <FriendsPage /> },
-          { path: '/quiz-question', element: <QuizQuestionPage /> },
+          { path: '//quiz/:quizId/play', element: <QuizQuestion /> },
           { path: '/enter-code', element: <EnterQuizCodePage /> },
+          {
+            path: '/session/:sessionId/result',
+            element: <SessionResult />,
+          },
         ],
       },
     ],

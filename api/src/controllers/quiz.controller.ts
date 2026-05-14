@@ -4,6 +4,9 @@ import {
   createQuiz,
   getAllQuizzes,
   getQuizById,
+  getLatestQuiz,
+  getQuizzesByCategory,
+  getRandomQuiz,
 } from '@services/quiz.service.js';
 
 export const getAll = async (_req: Request, res: Response) => {
@@ -76,5 +79,39 @@ export const addNewQuestion = async (req: Request, res: Response) => {
     return res.status(201).json(question);
   } catch {
     return res.status(400).json({ error_code: 'INTERNAL_SERVER_ERROR' });
+  }
+};
+
+export const latestQuiz = async (req: Request, res: Response) => {
+  try {
+    const quiz = await getLatestQuiz();
+    return res.status(200).json(quiz);
+  } catch (err: any) {
+    if (err.message === 'QUIZ_NOT_FOUND') {
+      return res.status(404).json({ error_code: 'QUIZ_NOT_FOUND' });
+    }
+    return res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
+  }
+};
+
+export const quizzesByCategory = async (req: Request, res: Response) => {
+  try {
+    const categoryId = Number(req.params.categoryId);
+    const quizzes = await getQuizzesByCategory(categoryId);
+    return res.status(200).json(quizzes);
+  } catch {
+    return res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
+  }
+};
+
+export const randomQuiz = async (req: Request, res: Response) => {
+  try {
+    const quiz = await getRandomQuiz();
+    return res.status(200).json(quiz);
+  } catch (err: any) {
+    if (err.message === 'QUIZ_NOT_FOUND') {
+      return res.status(404).json({ error_code: 'QUIZ_NOT_FOUND' });
+    }
+    return res.status(500).json({ error_code: 'INTERNAL_SERVER_ERROR' });
   }
 };

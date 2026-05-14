@@ -3,7 +3,7 @@ import { getByQuiz, getGlobal } from '../controllers/ranking.controller.js';
 
 const router = Router();
 
-router.get('/', getGlobal);
+router.get('/global', getGlobal);
 router.get('/quiz/:quizId', getByQuiz);
 
 export default router;

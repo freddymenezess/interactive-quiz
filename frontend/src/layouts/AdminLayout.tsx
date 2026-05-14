@@ -4,6 +4,6 @@ import { useAuth } from '@context/AuthContext';
 export default function AppLayout() {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
-  if (user.role !== 'admin') return <Navigate to="/dashboard" replace />;
+  if (user.role !== 'admin') return <Navigate to="/home" replace />;
   return <Outlet />;
 }

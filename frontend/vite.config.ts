@@ -5,6 +5,10 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],
+  server: {
+    allowedHosts: ['https://oi8cit-ip-15-204-225-138.tunnelmole.net'],
+    port: 5173,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -31,6 +35,9 @@ export default defineConfig({
       '@ui': fileURLToPath(new URL('./src/components/ui', import.meta.url)),
       '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
       '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
+      '@avatars': fileURLToPath(
+        new URL('./src/assets/avatars', import.meta.url)
+      ),
     },
   },
 });

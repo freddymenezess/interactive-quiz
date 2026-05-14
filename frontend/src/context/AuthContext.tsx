@@ -1,7 +1,13 @@
 import { createContext, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '@hooks/useAppDispatch';
-import { login, logout, getMe, register, clearError } from '@reducers/authSlice';
+import {
+  login,
+  logout,
+  getMe,
+  register,
+  clearError,
+} from '@reducers/authSlice';
 import type { User } from '@reducers/authSlice';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
@@ -13,7 +19,12 @@ interface AuthContextType {
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    gender: 'male' | 'female'
+  ) => Promise<void>;
   clearError: () => void;
 }
 
@@ -43,7 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login: (email, password) =>
           dispatch(login({ email, password })).unwrap(),
         logout: () => dispatch(logout()).unwrap(),
-        register:   (name, email, password)  => dispatch(register({ name, email, password })).unwrap(),
+        register: (name, email, password, gender) =>
+          dispatch(register({ name, email, password, gender })).unwrap(),
         clearError: () => dispatch(clearError()),
       }}
     >

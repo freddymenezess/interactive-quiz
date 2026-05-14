@@ -33,6 +33,11 @@ model Category {
 }
 
 // ── USER ──────────────────────────────────────────
+enum Gender {
+  male
+  female
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String   @db.VarChar(100)
@@ -47,6 +52,7 @@ model User {
   scores         Score[]
   bansReceived   BanLog[]  @relation("BannedUser")
   bansIssued     BanLog[]  @relation("AdminBan")
+  gender   Gender?
 
   @@map("users")
 }

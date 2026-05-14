@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  AuthLayout,
-  InputField,
-  AuthButton,
-} from '../components/auth/AuthComponents';
+import { Input } from '@ui/Input';
+import { AuthButton } from '@ui/AuthButton';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -16,35 +13,30 @@ export default function ForgotPassword() {
   };
 
   return (
-    <section className="grow-0 basis-sm py-5 lg:basis-md">
-      <h1 className="mb-6 text-xl leading-tight font-extrabold text-gray-800 sm:text-2xl md:text-3xl lg:text-4xl">
+    <section className="grow-0 basis-sm p-5 lg:basis-md">
+      <h1 className="text-titulo mb-6 text-xl leading-tight font-extrabold sm:text-2xl md:text-3xl lg:text-4xl">
         Esqueceu a sua palavra-passe?
       </h1>
-      <p className="mb-6 text-xs leading-relaxed text-gray-400">
-        Não se preocupe, isto acontece. Por favor, insira o endereço de email ligado à sua conta.
+      <p className="text-parhh mb-6 text-xs leading-relaxed">
+        Não se preocupe, isto acontece. Por favor, insira o endereço de email
+        ligado à sua conta.
       </p>
-
-      {/* Input */}
-      <InputField
+      <Input
         placeholder="Escreva o seu email"
         type="email"
         value={email}
         onChange={setEmail}
       />
-
-      {/* Send btn */}
       <div className="mt-2">
         <AuthButton label="Send Code" onClick={handleSend} />
       </div>
-
-      {/* Bottom link */}
-      <p className="mt-6 text-center text-xs text-gray-400">
-        Remember Password?{' '}
+      <p className="mt-6 text-center text-xs text-black">
+        Lembra-se da Palavra-passe?{' '}
         <button
           onClick={() => navigate('/login')}
-          className="font-bold text-[#4F7EF7] hover:underline"
+          className="text-blue-btn font-bold hover:underline"
         >
-          Login Now
+          Entrar
         </button>
       </p>
     </section>

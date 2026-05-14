@@ -52,5 +52,15 @@ export const errorMessages: Record<MessageTypes, string> = {
   MANY_REQUESTS:
     'Muitas tentativas em pouco tempo. Aguarde alguns instantes e tente novamente.',
 
+  GENDER_REQUIRED: 'Seleciona o teu género',
+
   UNKNOWN_ERROR: 'Erro interno do servidor',
 };
+
+import maleAvatar from '@avatars/male.png';
+import femaleAvatar from '@avatars/female.png';
+
+export function getAvatar(gender: 'male' | 'female'): string {
+  const pool = gender === 'female' ? femaleAvatar : maleAvatar;
+  return pool; // Return the first avatar as a placeholder
+}

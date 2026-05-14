@@ -11,6 +11,7 @@ export interface User {
   id: string;
   name: string;
   role: Role;
+  gender: 'male' | 'female';
 }
 
 export interface AuthState {
@@ -56,7 +57,7 @@ export const login = createAsyncThunk(
       const data = await authService.login(credentials);
       return data.user;
     } catch (err: any) {
-      return rejectWithValue(err.error_code ?? 'UNKNOWN_ERROR');
+      return rejectWithValue(getErrorMessage(err.error_code));
     }
   }
 );
@@ -68,7 +69,12 @@ export const logout = createAsyncThunk('/auth/logout', async () => {
 export const register = createAsyncThunk(
   '/auth/register',
   async (
-    credentials: { name: string; email: string; password: string },
+    credentials: {
+      name: string;
+      email: string;
+      password: string;
+      gender: 'male' | 'female';
+    },
     { rejectWithValue }
   ) => {
     try {

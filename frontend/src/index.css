@@ -9,13 +9,16 @@
   --color-texto: #1e232c;
   --color-traco: #6d6d6d;
   --color-input: #888;
-  --color-titulos: #262626;
+  --color-titulo: #262626;
   --color-sucesso: #18c07a;
   --color-semi: #7b89ff;
   --color-input: #f7f8f9;
   --color-eyeinput: #6d6d6d;
   --color-txtplacehorlder: #888;
   --color-auth: #4f4f4f;
-  --color-par: #5D5D5D;
-  --color-blue-btn: #2120FF;
+  --color-par: #5d5d5d;
+  --color-blue-btn: #2120ff;
+  --color-red: #c9353f;
+  --color-cinza: #3d3d3d;
+  --color-preenchimento: #f3f3f3;
 }

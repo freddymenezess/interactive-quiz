@@ -6,9 +6,8 @@ export const getAllQuizzes = async () => {
     include: {
       category: true,
       difficulty: true,
-      creator: {
-        select: { name: true },
-      },
+      creator: { select: { name: true, gender: true } },
+      questions: true,
     },
   });
 };
@@ -21,6 +20,7 @@ export const getQuizById = async (id: string) => {
         orderBy: { position: 'asc' },
         include: {
           options: true,
+          correctAnswer: true,
         },
       },
       category: true,
@@ -86,4 +86,43 @@ export const addQuestion = async (
 
     return { ...question, options: createdOptions };
   });
+};
+
+export const getLatestQuiz = async () => {
+  const quiz = await prisma.quiz.findFirst({
+    where: { active: true },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      category: true,
+      creator: { select: { name: true, gender: true } },
+    },
+  });
+
+  if (!quiz) throw new Error('QUIZ_NOT_FOUND');
+  return quiz;
+};
+
+export const getQuizzesByCategory = async (categoryId: number) => {
+  return prisma.quiz.findMany({
+    where: { active: true, categoryId },
+    include: {
+      category: true,
+      difficulty: true,
+      creator: { select: { name: true } },
+    },
+  });
+};
+
+export const getRandomQuiz = async () => {
+  const count = await prisma.quiz.count({ where: { active: true } });
+  if (count === 0) throw new Error('QUIZ_NOT_FOUND');
+
+  const skip = Math.floor(Math.random() * count);
+  const quiz = await prisma.quiz.findFirst({
+    where: { active: true },
+    skip,
+  });
+
+  if (!quiz) throw new Error('QUIZ_NOT_FOUND');
+  return quiz;
 };

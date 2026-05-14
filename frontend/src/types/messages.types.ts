@@ -45,4 +45,5 @@ export type MessageTypes =
   // GENERAL
   | 'INTERNAL_SERVER_ERROR'
   | 'MANY_REQUESTS'
-  | 'UNKNOWN_ERROR';
+  | 'UNKNOWN_ERROR'
+  | 'GENDER_REQUIRED';
