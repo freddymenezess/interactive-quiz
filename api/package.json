@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "postbuild": "prisma generate && prisma migrate deploy",
+    "build": "prisma generate && tsc",
+    "start": "prisma migrate deploy && node dist/server.js",
+    "postbuild": "prisma generate",
     "lint": "eslint src/",
     "format": "prettier --write src/"
   },

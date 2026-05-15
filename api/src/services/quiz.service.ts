@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@lib/prisma.js';
 
 export const getAllQuizzes = async () => {
@@ -50,7 +51,7 @@ export const addQuestion = async (
   const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
   if (!quiz) throw new Error('QUIZ_NOT_FOUND');
 
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const question = await tx.question.create({
       data: {
         text,

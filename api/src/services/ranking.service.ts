@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@lib/prisma.js';
 
 interface RankingEntry {
@@ -7,6 +8,15 @@ interface RankingEntry {
   totalScore: number;
   completedAt?: Date;
 }
+
+type GroupByScoreEntry = {
+  userId: string;
+  _sum: { totalScore: number | null };
+};
+
+type ScoreWithUser = Prisma.ScoreGetPayload<{
+  include: { user: { select: { name: true } } };
+}>;
 
 export const getGlobalRanking = async (
   limit: number = 10
@@ -21,7 +31,7 @@ export const getGlobalRanking = async (
   });
 
   return Promise.all(
-    ranking.map(async (entry, index) => {
+    ranking.map(async (entry: GroupByScoreEntry, index: number) => {
       const user = await prisma.user.findUnique({
         where: { id: entry.userId },
         select: { name: true, gender: true },
@@ -57,7 +67,7 @@ export const getRankingByQuiz = async (
     },
   });
 
-  return scores.map((score, index) => ({
+  return scores.map((score: ScoreWithUser, index: number) => ({
     position: index + 1,
     userId: score.userId,
     name: score.user?.name ?? 'Utilizador Desconhecido',
