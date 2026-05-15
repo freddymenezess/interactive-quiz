@@ -24,6 +24,7 @@ app.use(
   })
 );
 app.options('/{*path}', cors());
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
