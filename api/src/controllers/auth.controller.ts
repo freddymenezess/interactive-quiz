@@ -12,8 +12,8 @@ const passwordRegex =
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
+  secure: true,
+  sameSite: 'none' as const,
   maxAge: 2 * 24 * 60 * 60 * 1000,
 };
 
