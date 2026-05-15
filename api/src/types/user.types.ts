@@ -12,6 +12,7 @@ export interface UserResponse {
   id: string;
   name: string;
   role: RoleType;
+  gender?: 'male' | 'female' | 'other'
 }
 
 // Para a resposta do Login

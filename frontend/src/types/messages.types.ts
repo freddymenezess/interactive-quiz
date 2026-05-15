@@ -24,6 +24,7 @@ export type MessageTypes =
   | 'PASSWORD_REQUIRED'
   | 'PASSWORD_TOO_SHORT'
   | 'PASSWORD_WEAK'
+  | 'PASSWORD_MISMATCH'
 
   // QUIZ
   | 'QUIZ_NOT_FOUND'

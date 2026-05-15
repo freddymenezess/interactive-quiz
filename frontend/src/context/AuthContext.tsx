@@ -9,6 +9,7 @@ import {
   clearError,
 } from '@reducers/authSlice';
 import type { User } from '@reducers/authSlice';
+import type { MessageTypes } from '../types/messages.types';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -16,8 +17,8 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isSubmitting: boolean;
-  error: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  error: MessageTypes | string | null;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   register: (
     name: string,

@@ -5,7 +5,7 @@ const items = [
   { label: 'Home', path: '/home', icon: Home },
   { label: 'Quizzes', path: '/quizzes', icon: LayoutGrid },
   { label: 'Ranking', path: '/ranking', icon: BarChart2 },
-  { label: 'Jogar', path: null, icon: Users },
+  { label: 'Jogar', path: '', icon: Users },
 ];
 
 export default function Sidebar() {

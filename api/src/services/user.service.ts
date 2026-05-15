@@ -1,6 +1,12 @@
 import prisma from '@lib/prisma.js';
 
-export const getUserStats = async (userId: string) => {
+interface UserStats {
+  quizzesDone: number;
+  accuracy: number; // em %
+  position: number; // posição global
+}
+
+export const getUserStats = async (userId: string): Promise<UserStats> => {
   const scores = await prisma.score.findMany({
     where: { userId },
     include: {

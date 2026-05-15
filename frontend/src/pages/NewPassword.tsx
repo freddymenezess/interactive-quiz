@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  AuthLayout,
-  InputField,
-  AuthButton,
-} from '../components/auth/AuthComponents';
+import { Input } from '../components/ui/Input';
+import { AuthButton } from '../components/ui/AuthButton';
 
 export default function NewPassword() {
   const navigate = useNavigate();
@@ -17,7 +14,7 @@ export default function NewPassword() {
   };
 
   return (
-    <AuthLayout>
+    <section>
       {/* Header */}
       <h1 className="mb-3 text-2xl leading-tight font-extrabold text-gray-800">
         Create New Password
@@ -27,13 +24,13 @@ export default function NewPassword() {
       </p>
 
       {/* Inputs */}
-      <InputField
+      <Input
         placeholder="New Password"
         hasEye
         value={password}
         onChange={setPassword}
       />
-      <InputField
+      <Input
         placeholder="Confirm Password"
         hasEye
         value={confirm}
@@ -44,6 +41,6 @@ export default function NewPassword() {
       <div className="mt-2">
         <AuthButton label="Reset Password" onClick={handleReset} />
       </div>
-    </AuthLayout>
+    </section>
   );
 }

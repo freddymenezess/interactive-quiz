@@ -10,6 +10,7 @@ interface AuthResponse {
     id: string;
     name: string;
     role: 'admin' | 'user';
+    gender: 'male' | 'female';
   };
 }
 

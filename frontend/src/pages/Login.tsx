@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
-import { errorMessages } from '@lib/utils';
+import { errorMessages } from '../lib/utils';
 import { toast } from 'react-toastify';
-import { Input } from '@ui/Input';
-import { AuthButton } from '@ui/AuthButton';
+import { Input } from '../components/ui/Input';
+import { AuthButton } from '../components/ui/AuthButton';
 
 export default function Login() {
   const navigate = useNavigate();

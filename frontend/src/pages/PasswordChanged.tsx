@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { AuthLayout, AuthButton } from '../components/auth/AuthComponents';
+import { AuthButton } from '@components/ui/AuthButton';
 
 export default function PasswordChangedPage() {
   const navigate = useNavigate();
 
   return (
-    <AuthLayout>
+    <section>
       <div className="flex flex-col items-center justify-center gap-5 py-4">
         {/* Check circle */}
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#4F7EF7] shadow-lg">
@@ -39,6 +39,6 @@ export default function PasswordChangedPage() {
           />
         </div>
       </div>
-    </AuthLayout>
+    </section>
   );
 }

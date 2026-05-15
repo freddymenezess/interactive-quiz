@@ -15,7 +15,7 @@ export default function BottomNav() {
 
   const handlePlay = async () => {
     try {
-      const quiz = await quizService.getRandom();
+      const quiz: any = await quizService.getRandom();
       navigate(`/quiz/${quiz.id}/play`);
     } catch {
       // sem quizzes disponíveis

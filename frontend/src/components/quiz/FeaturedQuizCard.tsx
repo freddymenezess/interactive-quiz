@@ -1,13 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { getAvatar } from '@/lib/utils';
+import type { Gender } from '../../types/prisma.types';
 
 interface FeaturedQuizCardProps {
   title: string;
   category: string;
   sharedBy: string;
   quizId: string;
-  gender: 'male' | 'female';
+  gender: Gender;
   onDismiss?: () => void;
 }
 

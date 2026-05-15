@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input } from '@ui/Input';
-import { AuthButton } from '@ui/AuthButton';
+import { Input } from '../components/ui/Input';
+import { AuthButton } from '../components/ui/AuthButton';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
