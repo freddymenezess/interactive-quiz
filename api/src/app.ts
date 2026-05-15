@@ -13,6 +13,8 @@ import rankingRoutes from '@routes/ranking.routes.js';
 import userRoutes from '@routes/user.routes.js';
 
 const app = express();
+app.set('trust proxy', 1);
+
 const router = Router();
 
 app.use(
