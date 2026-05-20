@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '@lib/prisma.js';
-import type { LoginResponse } from '@types/user.types';
+import type { LoginResponse } from '../types/user.types.js';
 
 export const registerUser = async (
   name: string,
@@ -36,8 +36,8 @@ export const loginUser = async (
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (!isValid) throw new Error('INVALID_CREDENTIALS');
 
-  const secret = process.env.JWT_SECRET;
-  const expiresIn = process.env.JWT_EXPIRES_IN ?? '2d';
+  const secret: string | number | any = process.env.JWT_SECRET;
+  const expiresIn: string | number | any= process.env.JWT_EXPIRES_IN;
 
   if (!secret) throw new Error('JWT_SECRET não configurado');
 

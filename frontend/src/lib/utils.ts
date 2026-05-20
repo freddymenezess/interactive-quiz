@@ -1,6 +1,6 @@
-import type { MessageTypes } from '@types/messages.types';
+import type { MessageTypes } from '../types/messages.types';
 
-export const errorMessages: Record<MessageTypes, string> = {
+export const errorMessages: Record<MessageTypes | string, string> = {
   INVALID_CREDENTIALS:
     'E-mail ou senha incorretos. Verifique seus dados e tente novamente.',
   UNAUTHORIZED: 'Você precisa estar autenticado para acessar este recurso.',
@@ -26,6 +26,7 @@ export const errorMessages: Record<MessageTypes, string> = {
   INVALID_EMAIL_FORMAT: 'Informe um endereço de e-mail válido.',
   PASSWORD_REQUIRED: 'A senha é obrigatória.',
   PASSWORD_TOO_SHORT: 'A senha deve ter pelo menos 8 caracteres.',
+  PASSWORD_MISMATCH: 'As senhas não coincidem. Verifique e tente novamente.',
   PASSWORD_WEAK:
     'A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais.',
 

@@ -3,7 +3,7 @@ import { useHomePage } from '@hooks/useHomePage';
 import { useAuth } from '@context/AuthContext';
 import { Homeheader } from '@components/layout/Homeheader';
 import { FeaturedQuizCard } from '@quiz/FeaturedQuizCard';
-import { StatCard } from '@ui/StatCard';
+import { StatCard } from '@components/ui/StatCard';
 import { TopPlayers } from '@ranking/TopPlayers';
 import { QuizCard } from '@quiz/QuizCard';
 import { Layers } from 'lucide-react';
@@ -29,10 +29,10 @@ export default function Home() {
         ) : latestQuiz ? (
           <FeaturedQuizCard
             quizId={latestQuiz.id}
-            category={latestQuiz.category.name}
+            category={latestQuiz.category!.name }
             title={latestQuiz.title}
-            sharedBy={latestQuiz.creator.name}
-            gender={latestQuiz.creator.gender}
+            sharedBy={latestQuiz.creator!.name}
+            gender={latestQuiz.creator!.gender}
           />
         ) : (
           <p className="text-traco text-sm">Nenhum quiz disponível.</p>

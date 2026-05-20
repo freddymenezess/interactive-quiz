@@ -13,16 +13,20 @@ import rankingRoutes from '@routes/ranking.routes.js';
 import userRoutes from '@routes/user.routes.js';
 
 const app = express();
+app.set('trust proxy', 1);
+
 const router = Router();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
+app.options('/{*path}', cors());
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());

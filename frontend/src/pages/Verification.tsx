@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthLayout, AuthButton } from '../components/auth/AuthComponents';
+import { AuthButton } from '@components/ui/AuthButton';
 
 export default function OTPVerificationPage() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function OTPVerificationPage() {
   };
 
   return (
-    <AuthLayout>
+    <section>
       {/* Header */}
       <h1 className="mb-3 text-2xl leading-tight font-extrabold text-gray-800">
         OTP Verification
@@ -71,6 +71,6 @@ export default function OTPVerificationPage() {
           Resend
         </button>
       </p>
-    </AuthLayout>
+    </section>
   );
 }

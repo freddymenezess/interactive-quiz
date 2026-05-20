@@ -1,5 +1,5 @@
 import { useAuth } from '@context/AuthContext';
-import { getAvatar } from '@lib/utils';
+import { getAvatar } from '../../lib/utils';
 import sol from '@assets/sol.png';
 
 function getGreeting() {

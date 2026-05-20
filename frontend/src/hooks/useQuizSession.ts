@@ -19,12 +19,10 @@ export function useQuizSession(quizId: string) {
     async function init() {
       try {
         const quizData = await quizService.getById(quizId);
-        console.log('primeira pergunta:', quizData.questions[0]);
-        console.log('correctAnswer:', quizData.questions[0]?.correctAnswer);
         setQuiz(quizData);
 
         const session = await sessionService.start(quizId);
-        setSessionId(session.id);
+        setSessionId(session.userId);
       } finally {
         setIsLoading(false);
       }

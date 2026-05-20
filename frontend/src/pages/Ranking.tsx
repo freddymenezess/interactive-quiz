@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@context/AuthContext';
 import { useRanking } from '@hooks/useRanking';
-import { getAvatar } from '@lib/utils';
+import { getAvatar } from '../lib/utils';
 import BottomNav from '@components/layout/BottomNav';
 import Sidebar from '@components/layout/Sidebar';
 

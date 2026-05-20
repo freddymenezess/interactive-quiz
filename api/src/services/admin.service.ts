@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@lib/prisma.js';
 
 export const banUser = async (
@@ -5,7 +6,7 @@ export const banUser = async (
   adminId: string,
   reason: string
 ) => {
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const user = await tx.user.update({
       where: { id: userId },
       data: { banned: true },

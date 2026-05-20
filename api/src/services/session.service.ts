@@ -1,4 +1,21 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@lib/prisma.js';
+
+type SessionWithDetails = Prisma.SessionGetPayload<{
+  include: {
+    answers: true;
+    quiz: {
+      include: {
+        questions: {
+          include: { correctAnswer: true };
+        };
+      };
+    };
+  };
+}>;
+
+type Question = SessionWithDetails['quiz']['questions'][number];
+type Answer = SessionWithDetails['answers'][number];
 
 export const startSession = async (userId: string, quizId: string) => {
   return await prisma.session.create({
@@ -49,10 +66,10 @@ export const finishSession = async (sessionId: string) => {
   if (session.completedAt) throw new Error('SESSION_ALREADY_COMPLETED');
 
   let totalScore = 0;
-  session.quiz.questions.forEach((question) => {
+  session.quiz.questions.forEach((question: Question) => {
     const correctOptionId = question.correctAnswer?.optionId;
     const userResponse = session.answers.find(
-      (a) => a.questionId === question.id
+      (a: Answer) => a.questionId === question.id
     );
 
     if (userResponse && userResponse.optionId === correctOptionId) {
@@ -60,7 +77,7 @@ export const finishSession = async (sessionId: string) => {
     }
   });
 
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     await tx.session.update({
       where: { id: sessionId },
       data: { completedAt: new Date() },

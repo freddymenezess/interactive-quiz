@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { authService } from '@api/auth.service';
-import { errorMessages } from '@lib/utils';
+import { errorMessages } from '../lib/utils';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
