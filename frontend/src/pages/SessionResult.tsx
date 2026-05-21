@@ -31,17 +31,19 @@ export default function SessionResultPage() {
         {/* Stats */}
         <div className="mb-8 grid grid-cols-3 gap-4">
           <div className="rounded-2xl bg-green-50 p-4">
-            <p className="text-2xl font-extrabold text-green-600">{correct}</p>
+            <p className="md:text-2xl font-extrabold text-green-600">{correct}</p>
             <p className="text-xs text-gray-400">Certas</p>
           </div>
           <div className="rounded-2xl bg-red-50 p-4">
-            <p className="text-2xl font-extrabold text-red-500">
+            <p className="font-extrabold text-red-500 md:text-2xl">
               {total - correct}
             </p>
             <p className="text-xs text-gray-400">Erradas</p>
           </div>
           <div className="rounded-2xl bg-blue-50 p-4">
-            <p className="text-blue-btn text-2xl font-extrabold">{accuracy}%</p>
+            <p className="text-blue-btn font-extrabold md:text-2xl">
+              {accuracy}%
+            </p>
             <p className="text-xs text-gray-400">Precisão</p>
           </div>
         </div>

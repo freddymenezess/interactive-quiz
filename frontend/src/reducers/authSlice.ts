@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { authService } from '@api/auth.service';
-import { errorMessages } from '../lib/utils';
+import { ERROR_MESSAGES } from '../lib/utils';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -31,7 +31,7 @@ const initialState: AuthState = {
 };
 
 const getErrorMessage = (code: string): string =>
-  errorMessages[code] ?? errorMessages.UNKNOWN_ERROR;
+  ERROR_MESSAGES[code] ?? ERROR_MESSAGES.UNKNOWN_ERROR;
 
 // ─── Thunks (ações assíncronas) ───────────────────────────────────────────────
 

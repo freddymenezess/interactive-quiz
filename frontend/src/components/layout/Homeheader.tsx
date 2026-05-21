@@ -1,5 +1,5 @@
 import { useAuth } from '@context/AuthContext';
-import { getAvatar } from '../../lib/utils';
+import { DropdownMenuAvatar } from '@ui/dropdown-menu-avatar';
 import sol from '@assets/sol.png';
 
 function getGreeting() {
@@ -22,9 +22,7 @@ export function Homeheader() {
           {user?.name.split(' ')[0] || 'Usuário'}
         </h1>
       </div>
-      <div className="flex h-14 w-14 items-center justify-center rounded-full text-base font-bold text-white shadow">
-        <img src={getAvatar(user?.gender || 'male')} alt="avatar" />
-      </div>
+      <DropdownMenuAvatar />
     </div>
   );
 }

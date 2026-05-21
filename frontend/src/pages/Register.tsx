@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
-import { errorMessages } from '../lib/utils';
+import { ERROR_MESSAGES } from '../lib/utils';
 import { toast } from 'react-toastify';
 import { Input } from '@components/ui/Input';
 import { AuthButton } from '@components/ui/AuthButton';
@@ -17,38 +17,38 @@ export default function Register() {
 
   useEffect(() => {
     if (error) {
-      toast.error(errorMessages[error] ?? error);
+      toast.error(ERROR_MESSAGES[error] ?? error);
     }
   }, [error]);
 
   const handleRegister = async () => {
     if (!username) {
-      toast.error(errorMessages['NAME_REQUIRED']);
+      toast.error(ERROR_MESSAGES['NAME_REQUIRED']);
       return;
     }
 
     if (username.trim().length < 2) {
-      toast.error(errorMessages['NAME_TOO_SHORT']);
+      toast.error(ERROR_MESSAGES['NAME_TOO_SHORT']);
       return;
     }
 
     if (!email) {
-      toast.error(errorMessages['EMAIL_REQUIRED']);
+      toast.error(ERROR_MESSAGES['EMAIL_REQUIRED']);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error(errorMessages['INVALID_EMAIL_FORMAT']);
+      toast.error(ERROR_MESSAGES['INVALID_EMAIL_FORMAT']);
       return;
     }
 
     if (!password) {
-      toast.error(errorMessages['PASSWORD_REQUIRED']);
+      toast.error(ERROR_MESSAGES['PASSWORD_REQUIRED']);
       return;
     }
 
     if (password.length < 8) {
-      toast.error(errorMessages['PASSWORD_TOO_SHORT']);
+      toast.error(ERROR_MESSAGES['PASSWORD_TOO_SHORT']);
       return;
     }
 
@@ -57,17 +57,17 @@ export default function Register() {
         password
       )
     ) {
-      toast.error(errorMessages['PASSWORD_WEAK']);
+      toast.error(ERROR_MESSAGES['PASSWORD_WEAK']);
       return;
     }
 
     if (password !== confirm) {
-      toast.error(errorMessages['PASSWORD_MISMATCH']);
+      toast.error(ERROR_MESSAGES['PASSWORD_MISMATCH']);
       return;
     }
 
     if (!gender) {
-      toast.error(errorMessages['GENDER_REQUIRED']);
+      toast.error(ERROR_MESSAGES['GENDER_REQUIRED']);
       return;
     }
 

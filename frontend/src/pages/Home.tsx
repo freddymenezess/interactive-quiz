@@ -68,9 +68,8 @@ export default function Home() {
                   icon={<Layers size={28} className="text-botao" />}
                   title={q.title}
                   count={`${q.questions?.length ?? 0} Perguntas`}
-                  people={`Categoria: ${q.category?.name ?? '—'}`}
-                  avatarColors={['bg-pink-400', 'bg-purple-400', 'bg-blue-400']}
-                  onResult={() => navigate(`/quizzes/${q.id}`)}
+                  category={`Categoria: ${q.category?.name ?? '—'}`}
+                  onResult={() => navigate(`/quiz/${q.id}/play`)}
                 />
               ))}
             </div>

@@ -1,9 +1,14 @@
+import avatar1 from '@assets/avatars/male.png';
+import avatar2 from '@assets/avatars/female.png';
+import avatar3 from '@assets/avatars/male2.png';
+
+const avatars = [avatar1, avatar2, avatar3];
+
 interface QuizCardProps {
   icon: React.ReactNode;
   title: string;
   count: string;
-  people: string;
-  avatarColors: string[];
+  category: string;
   onResult?: () => void;
 }
 
@@ -11,8 +16,7 @@ export function QuizCard({
   icon,
   title,
   count,
-  people,
-  avatarColors,
+  category,
   onResult,
 }: QuizCardProps) {
   return (
@@ -29,22 +33,22 @@ export function QuizCard({
           onClick={onResult}
           className="text-blue-btn flex shrink-0 items-center gap-1 text-xs font-bold hover:underline"
         >
-          Ver mais
+          Começar
         </button>
       </div>
       <div className="flex items-center gap-2">
         <div className="flex -space-x-2">
-          {avatarColors.map((color, i) => (
+          {avatars.map((avatar, i) => (
             <div
               key={i}
-              className={`h-7 w-7 rounded-full ${color} flex items-center justify-center border-2 border-white text-xs font-bold text-white`}
+              className="h-7 w-7 rounded-full flex items-center justify-center border-2 border-white text-xs font-bold text-white"
             >
-              {String.fromCharCode(65 + i)}
+              <img src={avatar} alt={`Avatar ${i + 1}`} className="h-full w-full rounded-full object-cover" />
             </div>
           ))}
         </div>
         <span className="text-traco truncate text-xs font-medium">
-          {people}
+          {category}
         </span>
       </div>
     </div>

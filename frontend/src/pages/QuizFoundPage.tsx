@@ -54,7 +54,7 @@ export default function QuizFoundPage() {
           </div>
 
           {/* Title */}
-          <h2 className="mb-5 text-xl font-extrabold text-gray-900">
+          <h2 className="mb-5 text-xl font-extraboldh text-gray-900">
             Saturday night Quiz
           </h2>
 

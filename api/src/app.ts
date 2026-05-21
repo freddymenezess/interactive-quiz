@@ -16,17 +16,18 @@ const app = express();
 app.set('trust proxy', 1);
 
 const router = Router();
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
-app.options('/{*path}', cors());
+app.options('/{*path}', cors(corsOptions));
+
 console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
+
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());

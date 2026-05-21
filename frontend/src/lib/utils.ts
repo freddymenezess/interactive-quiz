@@ -1,6 +1,6 @@
 import type { MessageTypes } from '../types/messages.types';
 
-export const errorMessages: Record<MessageTypes | string, string> = {
+export const ERROR_MESSAGES: Record<MessageTypes | string, string> = {
   INVALID_CREDENTIALS:
     'E-mail ou senha incorretos. Verifique seus dados e tente novamente.',
   UNAUTHORIZED: 'Você precisa estar autenticado para acessar este recurso.',
@@ -61,7 +61,14 @@ export const errorMessages: Record<MessageTypes | string, string> = {
 import maleAvatar from '@avatars/male.png';
 import femaleAvatar from '@avatars/female.png';
 
-export function getAvatar(gender: 'male' | 'female'): string {
+export function getAvatar(gender: 'male' | 'female' | undefined): string {
   const pool = gender === 'female' ? femaleAvatar : maleAvatar;
   return pool; // Return the first avatar as a placeholder
+}
+
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

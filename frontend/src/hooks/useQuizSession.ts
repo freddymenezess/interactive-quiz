@@ -7,7 +7,7 @@ export function useQuizSession(quizId: string) {
   const navigate = useNavigate();
 
   const [quiz, setQuiz] = useState<any>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string>('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -22,7 +22,7 @@ export function useQuizSession(quizId: string) {
         setQuiz(quizData);
 
         const session = await sessionService.start(quizId);
-        setSessionId(session.userId);
+        setSessionId(session.id);
       } finally {
         setIsLoading(false);
       }

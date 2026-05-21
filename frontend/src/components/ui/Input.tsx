@@ -4,7 +4,8 @@ import { Eye, EyeOff } from 'lucide-react';
 interface InputProps {
   placeholder: string;
   label?: string;
-  type?: string;
+  type?: React.HTMLInputTypeAttribute;
+  autocomplete?: React.HTMLAttributeAnchorTarget;
   hasEye?: boolean;
   value?: string;
   onChange?: (v: string) => void;
@@ -14,6 +15,7 @@ export function Input({
   placeholder,
   label,
   type = 'text',
+  autocomplete,
   hasEye = false,
   value,
   onChange,
@@ -28,6 +30,7 @@ export function Input({
       )}
       <input
         type={hasEye ? (show ? 'text' : 'password') : type}
+        autoComplete={autocomplete}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}

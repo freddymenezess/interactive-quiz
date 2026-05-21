@@ -12,8 +12,11 @@ const passwordRegex =
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,
-  sameSite: 'none' as const,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite:
+    process.env.NODE_ENV === 'production'
+      ? ('none' as const)
+      : ('lax' as const),
   maxAge: 2 * 24 * 60 * 60 * 1000,
 };
 
@@ -41,6 +44,9 @@ export const login = async (req: Request, res: Response) => {
   } catch (err: any) {
     if (err?.error_code) {
       return res.status(err.status ?? 400).json({ error_code: err.error_code });
+    }
+    if (err?.message) {
+      return res.status(401).json({ error_code: err.message });
     }
     throw err;
   }

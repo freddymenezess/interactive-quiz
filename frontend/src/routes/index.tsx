@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
           { path: '/quizzes', element: <QuizzesPage /> },
           { path: '/ranking', element: <Ranking /> },
           { path: '/friends', element: <FriendsPage /> },
-          { path: '//quiz/:quizId/play', element: <QuizQuestion /> },
+          { path: '/quiz/:quizId/play', element: <QuizQuestion /> },
           { path: '/enter-code', element: <EnterQuizCodePage /> },
           {
             path: '/session/:sessionId/result',

@@ -67,9 +67,9 @@ export default function Quizzes() {
                   </div>
                   <button
                     onClick={() => navigate(`/quiz/${q.id}/play`)}
-                    className="flex items-center gap-1 text-xs font-bold text-[#4D61DE]"
+                    className="flex items-center gap-1 text-xs font-bold text-botao"
                   >
-                    <BarChart2 size={14} color="#4D61DE" /> Ver
+                    <BarChart2 size={14} color="#4D61DE" /> Começar
                   </button>
                 </div>
               );

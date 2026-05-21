@@ -9,7 +9,7 @@ import type { RankingEntry } from '@/types/ranking.types';
 import type { UserStats } from '../types/user.types';
 
 export function useHomePage() {
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const [latestQuiz, setLatestQuiz] = useState<QuizWithRelations | null>(null);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [topPlayers, setTopPlayers] = useState<RankingEntry[]>([]);
@@ -17,11 +17,14 @@ export function useHomePage() {
   const [quizzes, setQuizzes] = useState<QuizWithRelations[]>([]);
 
   useEffect(() => {
+    console.log('authLoading:', authLoading, 'user:', user);
+    if (authLoading || !user) return;
+
     async function load() {
       try {
         const [quiz, userStats, ranking, allQuizzes] = await Promise.all([
           quizService.getLatest(),
-          userService.getMyStats(), // certifique-se que userService retorna UserStats
+          userService.getMyStats(), 
           rankingService.getGlobal(5),
           quizService.getAll(),
         ]);
@@ -34,7 +37,7 @@ export function useHomePage() {
       }
     }
     load();
-  }, []);
+  }, [user, authLoading]);
 
   return { latestQuiz, stats, topPlayers, quizzes, isLoading, user };
 }

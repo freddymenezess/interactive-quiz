@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
 import { getAvatar } from '@/lib/utils';
 import type { Gender } from '../../types/prisma.types';
 
@@ -29,12 +28,6 @@ export function FeaturedQuizCard({
           <span className="text-red rounded-full bg-white px-3 py-1 text-xs font-bold">
             {category}
           </span>
-          <button
-            onClick={onDismiss}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-white transition hover:bg-white/30"
-          >
-            <X size={14} />
-          </button>
         </div>
         <h3 className="mb-1 text-xl font-extrabold text-white md:text-2xl">
           {title}
