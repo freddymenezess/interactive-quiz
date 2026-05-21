@@ -17,7 +17,6 @@ export function FeaturedQuizCard({
   sharedBy,
   quizId,
   gender,
-  onDismiss,
 }: FeaturedQuizCardProps) {
   const navigate = useNavigate();
 
