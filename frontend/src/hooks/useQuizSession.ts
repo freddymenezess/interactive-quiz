@@ -22,7 +22,7 @@ export function useQuizSession(quizId: string) {
         setQuiz(quizData);
 
         const session = await sessionService.start(quizId);
-        setSessionId(session.userId);
+        setSessionId(session.id);
       } finally {
         setIsLoading(false);
       }

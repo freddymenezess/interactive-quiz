@@ -14,8 +14,11 @@ interface SessionWithDetails {
 }
 
 interface SessionResponse {
+  id: string;
   userId: string;
   quizId: string;
+  startedAt: string;
+  completedAt?: string;
 }
 
 export const sessionService = {

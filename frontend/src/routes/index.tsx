@@ -9,6 +9,7 @@ import Ranking from '@/pages/Ranking';
 import FriendsPage from '@/pages/FriendsPage';
 import QuizQuestion from '@/pages/QuizQuestion';
 import EnterQuizCodePage from '@/pages/EnterQuizCodePage';
+import QuizFoundPage from '@/pages/QuizFoundPage';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -37,8 +38,9 @@ export const router = createBrowserRouter([
           { path: '/quizzes', element: <QuizzesPage /> },
           { path: '/ranking', element: <Ranking /> },
           { path: '/friends', element: <FriendsPage /> },
-          { path: '//quiz/:quizId/play', element: <QuizQuestion /> },
+          { path: '/quiz/:quizId/play', element: <QuizQuestion /> },
           { path: '/enter-code', element: <EnterQuizCodePage /> },
+          { path: '/quiz-found/:id', element: <QuizFoundPage /> },
           {
             path: '/session/:sessionId/result',
             element: <SessionResult />,
